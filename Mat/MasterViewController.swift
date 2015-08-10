@@ -9,6 +9,7 @@
 import UIKit
 
 class MasterViewController: UITableViewController {
+    @IBOutlet weak var logoutBarButton: UIBarButtonItem!
 
     var detailViewController: DetailViewController? = nil
     var objects = [AnyObject]()
@@ -19,8 +20,10 @@ class MasterViewController: UITableViewController {
         // Do any additional setup after loading the view, typically from a nib.
         self.navigationItem.leftBarButtonItem = self.editButtonItem()
 
+        /*
         let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "insertNewObject:")
         self.navigationItem.rightBarButtonItem = addButton
+*/
         if let split = self.splitViewController {
             let controllers = split.viewControllers
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
@@ -28,8 +31,13 @@ class MasterViewController: UITableViewController {
     }
 
     override func viewWillAppear(animated: Bool) {
-        self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed
+        if #available(iOS 8.0, *) {
+            self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed
+        } else {
+            // Fallback on earlier versions
+        }
         super.viewWillAppear(animated)
+        performSegueWithIdentifier("logout", sender: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -51,7 +59,11 @@ class MasterViewController: UITableViewController {
                 let object = objects[indexPath.row] as! NSDate
                 let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
                 controller.detailItem = object
-                controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+                if #available(iOS 8.0, *) {
+                    controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+                } else {
+                    // Fallback on earlier versions
+                }
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
         }

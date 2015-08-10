@@ -195,6 +195,7 @@
 				TargetAttributes = {
 					BF80D16F1B6A4F050098A3F9 = {
 						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = 7R74A9N52A;
 					};
 					BF80D1851B6A4F050098A3F9 = {
 						CreatedOnToolsVersion = 7.0;
@@ -402,10 +403,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Mat/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.leopub.Mat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -413,10 +418,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Mat/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.leopub.Mat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -487,6 +496,7 @@
 				BF80D19C1B6A4F060098A3F9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BF80D19D1B6A4F060098A3F9 /* Build configuration list for PBXNativeTarget "MatTests" */ = {
 			isa = XCConfigurationList;
@@ -495,6 +505,7 @@
 				BF80D19F1B6A4F060098A3F9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BF80D1A01B6A4F060098A3F9 /* Build configuration list for PBXNativeTarget "MatUITests" */ = {
 			isa = XCConfigurationList;
@@ -503,6 +514,7 @@
 				BF80D1A21B6A4F060098A3F9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
