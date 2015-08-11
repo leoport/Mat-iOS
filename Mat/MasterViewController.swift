@@ -37,7 +37,9 @@ class MasterViewController: UITableViewController {
             // Fallback on earlier versions
         }
         super.viewWillAppear(animated)
-        performSegueWithIdentifier("logout", sender: nil)
+        if UserManager.Instance.currentUser == nil {
+            performSegueWithIdentifier("logout", sender: nil)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -101,6 +103,9 @@ class MasterViewController: UITableViewController {
         }
     }
 
+    @IBAction func onLogout(sender: UIBarButtonItem) {
+        UserManager.Instance.currentUser = nil
+    }
 
 }
 

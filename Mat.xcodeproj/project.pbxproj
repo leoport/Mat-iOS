@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF0D899B1B78D149003F2878 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0D899A1B78D149003F2878 /* LoginViewController.swift */; };
+		BF0D899D1B78DE49003F2878 /* Configure.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0D899C1B78DE49003F2878 /* Configure.swift */; };
 		BF80D1741B6A4F050098A3F9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF80D1731B6A4F050098A3F9 /* AppDelegate.swift */; };
 		BF80D1761B6A4F050098A3F9 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF80D1751B6A4F050098A3F9 /* MasterViewController.swift */; };
 		BF80D1781B6A4F050098A3F9 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF80D1771B6A4F050098A3F9 /* DetailViewController.swift */; };
@@ -15,6 +17,9 @@
 		BF80D1801B6A4F050098A3F9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF80D17E1B6A4F050098A3F9 /* LaunchScreen.storyboard */; };
 		BF80D18B1B6A4F050098A3F9 /* MatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF80D18A1B6A4F050098A3F9 /* MatTests.swift */; };
 		BF80D1961B6A4F060098A3F9 /* MatUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF80D1951B6A4F060098A3F9 /* MatUITests.swift */; };
+		BFE6031C1B79F9BF003E23D3 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE6031B1B79F9BF003E23D3 /* UserManager.swift */; };
+		BFE6031E1B79FDA0003E23D3 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE6031D1B79FDA0003E23D3 /* User.swift */; };
+		BFE603201B7A06EB003E23D3 /* HttpUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE6031F1B7A06EB003E23D3 /* HttpUtil.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +40,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BF0D899A1B78D149003F2878 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		BF0D899C1B78DE49003F2878 /* Configure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configure.swift; sourceTree = "<group>"; };
 		BF80D1701B6A4F050098A3F9 /* Mat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF80D1731B6A4F050098A3F9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BF80D1751B6A4F050098A3F9 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
@@ -49,6 +56,9 @@
 		BF80D1911B6A4F060098A3F9 /* MatUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MatUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF80D1951B6A4F060098A3F9 /* MatUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatUITests.swift; sourceTree = "<group>"; };
 		BF80D1971B6A4F060098A3F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BFE6031B1B79F9BF003E23D3 /* UserManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		BFE6031D1B79FDA0003E23D3 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		BFE6031F1B7A06EB003E23D3 /* HttpUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpUtil.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,12 +110,17 @@
 			isa = PBXGroup;
 			children = (
 				BF80D1731B6A4F050098A3F9 /* AppDelegate.swift */,
+				BF0D899A1B78D149003F2878 /* LoginViewController.swift */,
 				BF80D1751B6A4F050098A3F9 /* MasterViewController.swift */,
 				BF80D1771B6A4F050098A3F9 /* DetailViewController.swift */,
 				BF80D1791B6A4F050098A3F9 /* Main.storyboard */,
 				BF80D17C1B6A4F050098A3F9 /* Assets.xcassets */,
 				BF80D17E1B6A4F050098A3F9 /* LaunchScreen.storyboard */,
 				BF80D1811B6A4F050098A3F9 /* Info.plist */,
+				BF0D899C1B78DE49003F2878 /* Configure.swift */,
+				BFE6031B1B79F9BF003E23D3 /* UserManager.swift */,
+				BFE6031D1B79FDA0003E23D3 /* User.swift */,
+				BFE6031F1B7A06EB003E23D3 /* HttpUtil.swift */,
 			);
 			path = Mat;
 			sourceTree = "<group>";
@@ -259,9 +274,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFE6031C1B79F9BF003E23D3 /* UserManager.swift in Sources */,
+				BF0D899B1B78D149003F2878 /* LoginViewController.swift in Sources */,
 				BF80D1781B6A4F050098A3F9 /* DetailViewController.swift in Sources */,
 				BF80D1761B6A4F050098A3F9 /* MasterViewController.swift in Sources */,
 				BF80D1741B6A4F050098A3F9 /* AppDelegate.swift in Sources */,
+				BF0D899D1B78DE49003F2878 /* Configure.swift in Sources */,
+				BFE6031E1B79FDA0003E23D3 /* User.swift in Sources */,
+				BFE603201B7A06EB003E23D3 /* HttpUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
