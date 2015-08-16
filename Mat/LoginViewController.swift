@@ -12,6 +12,8 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var usernameTextField: UITextField!
+    var loginTask : LoginTask?
+    var user : User?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +46,11 @@ class LoginViewController: UIViewController {
         
     }
     func login(username: String, password: String) {
+        user = User(userId: Int(username)!)
+        loginTask = LoginTask(controller: self)
+        let dict = ["username": username, "password": password]
+        loginTask?.post(Configure.LOGIN_URL, params: dict)
+        /*
         func handleCompletion(data: NSData?, response: NSURLResponse?, error: NSError?) -> Void {
             //let newStr = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
             let httpResponse = response as! NSHTTPURLResponse
@@ -55,20 +62,60 @@ class LoginViewController: UIViewController {
                     let user = User(userId: Int(username)!)
                     user.sessionId = keyValue[1]
                     user.cookieId = keyValue[1]
-                    UserManager.Instance.currentUser = user
+                    UserManager.getInstance().setCurrentUser(user)
                     dismissViewControllerAnimated(true, completion: nil)
                 }
             }
+            usernameTextField.enabled = true
+            passwordTextField.enabled = true
+            loginButton.enabled = true
         }
         let params = "username=" + username + "&password=" + password;
         let session = NSURLSession.sharedSession()
-        let request = NSMutableURLRequest(URL: NSURL(string: Configure.loginURL)!)
+        let request = NSMutableURLRequest(URL: NSURL(string: Configure.LOGIN_URL)!)
         request.HTTPMethod = "POST"
         request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding)
         request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.addValue("en-us", forHTTPHeaderField: "Content-Language")
         request.addValue(String(request.HTTPBody!.length), forHTTPHeaderField: "Content-Length")
         let dataTask = session.dataTaskWithRequest(request, completionHandler: handleCompletion)
-        dataTask.resume()
+        dataTask.resume() */
+    }
+    func initUserData() {
+        var initUserDataTask = InitUserDataTask(controller : self)
+        initUserDataTask.get(Configure.MSG_FETCH_URL)
+    }
+
+    class LoginTask : HttpTask {
+        var user : User
+        var controller : LoginViewController
+        required init(controller : LoginViewController) {
+            self.controller = controller
+            self.user = controller.user!
+        }
+
+        func postExcute(response: NSString) {
+            if controller.user!.isLogedIn() {
+                UserManager.getInstance().setCurrentUser(controller.user)
+                //controller.dismissViewControllerAnimated(true, completion: nil)
+                controller.initUserData()
+            } else {
+                controller.usernameTextField.enabled = true
+                controller.passwordTextField.enabled = true
+                controller.loginButton.enabled = true
+            }
+        }
+    }
+    class InitUserDataTask : HttpTask {
+        var user : User
+        var controller : LoginViewController
+        required init(controller : LoginViewController) {
+            self.controller = controller
+            self.user = controller.user!
+        }
+        func postExcute(response: NSString) {
+            user.sync(response as String)
+            controller.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
 }

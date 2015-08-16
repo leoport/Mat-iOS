@@ -37,7 +37,7 @@ class MasterViewController: UITableViewController {
             // Fallback on earlier versions
         }
         super.viewWillAppear(animated)
-        if UserManager.Instance.currentUser == nil {
+        if UserManager.getInstance().getCurrentUser() == nil {
             performSegueWithIdentifier("logout", sender: nil)
         }
     }
@@ -104,7 +104,7 @@ class MasterViewController: UITableViewController {
     }
 
     @IBAction func onLogout(sender: UIBarButtonItem) {
-        UserManager.Instance.currentUser = nil
+        UserManager.getInstance().setCurrentUser(nil)
     }
 
 }

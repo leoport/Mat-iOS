@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF0824631B7AE07C00CECA85 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = BF0824571B7AE07C00CECA85 /* FMDatabase.m */; };
+		BF0824641B7AE07C00CECA85 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BF0824591B7AE07C00CECA85 /* FMDatabaseAdditions.m */; };
+		BF0824651B7AE07C00CECA85 /* FMDatabaseAdditionsVariadic.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF08245A1B7AE07C00CECA85 /* FMDatabaseAdditionsVariadic.swift */; };
+		BF0824661B7AE07C00CECA85 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = BF08245C1B7AE07C00CECA85 /* FMDatabasePool.m */; };
+		BF0824671B7AE07C00CECA85 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = BF08245E1B7AE07C00CECA85 /* FMDatabaseQueue.m */; };
+		BF0824681B7AE07C00CECA85 /* FMDatabaseVariadic.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF08245F1B7AE07C00CECA85 /* FMDatabaseVariadic.swift */; };
+		BF0824691B7AE07C00CECA85 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = BF0824621B7AE07C00CECA85 /* FMResultSet.m */; };
+		BF08246C1B7AEE4400CECA85 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BF08246B1B7AEE4400CECA85 /* libsqlite3.0.tbd */; };
 		BF0D899B1B78D149003F2878 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0D899A1B78D149003F2878 /* LoginViewController.swift */; };
 		BF0D899D1B78DE49003F2878 /* Configure.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0D899C1B78DE49003F2878 /* Configure.swift */; };
 		BF80D1741B6A4F050098A3F9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF80D1731B6A4F050098A3F9 /* AppDelegate.swift */; };
@@ -17,9 +25,16 @@
 		BF80D1801B6A4F050098A3F9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF80D17E1B6A4F050098A3F9 /* LaunchScreen.storyboard */; };
 		BF80D18B1B6A4F050098A3F9 /* MatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF80D18A1B6A4F050098A3F9 /* MatTests.swift */; };
 		BF80D1961B6A4F060098A3F9 /* MatUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF80D1951B6A4F060098A3F9 /* MatUITests.swift */; };
+		BFC09BEA1B7D87F3000B0C88 /* HttpTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC09BE91B7D87F3000B0C88 /* HttpTask.swift */; };
+		BFDABB881B7C3E7C00E36334 /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDABB871B7C3E7C00E36334 /* MessageType.swift */; };
+		BFDABB8A1B7C452200E36334 /* InboxItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDABB891B7C452200E36334 /* InboxItem.swift */; };
 		BFE6031C1B79F9BF003E23D3 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE6031B1B79F9BF003E23D3 /* UserManager.swift */; };
 		BFE6031E1B79FDA0003E23D3 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE6031D1B79FDA0003E23D3 /* User.swift */; };
 		BFE603201B7A06EB003E23D3 /* HttpUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE6031F1B7A06EB003E23D3 /* HttpUtil.swift */; };
+		BFF1AEE81B7C357000B74EDF /* ConfirmItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF1AEE71B7C357000B74EDF /* ConfirmItem.swift */; };
+		BFF1AEEA1B7C35FE00B74EDF /* MessageStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF1AEE91B7C35FE00B74EDF /* MessageStatus.swift */; };
+		BFF1AEEC1B7C36E200B74EDF /* DateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF1AEEB1B7C36E200B74EDF /* DateTime.swift */; };
+		BFF1AEEE1B7C39A600B74EDF /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF1AEED1B7C39A600B74EDF /* Contact.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +55,21 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BF0824551B7AE07B00CECA85 /* Mat-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mat-Bridging-Header.h"; sourceTree = "<group>"; };
+		BF0824561B7AE07C00CECA85 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
+		BF0824571B7AE07C00CECA85 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
+		BF0824581B7AE07C00CECA85 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		BF0824591B7AE07C00CECA85 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		BF08245A1B7AE07C00CECA85 /* FMDatabaseAdditionsVariadic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMDatabaseAdditionsVariadic.swift; sourceTree = "<group>"; };
+		BF08245B1B7AE07C00CECA85 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
+		BF08245C1B7AE07C00CECA85 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
+		BF08245D1B7AE07C00CECA85 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
+		BF08245E1B7AE07C00CECA85 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
+		BF08245F1B7AE07C00CECA85 /* FMDatabaseVariadic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMDatabaseVariadic.swift; sourceTree = "<group>"; };
+		BF0824601B7AE07C00CECA85 /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDB.h; sourceTree = "<group>"; };
+		BF0824611B7AE07C00CECA85 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
+		BF0824621B7AE07C00CECA85 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
+		BF08246B1B7AEE4400CECA85 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		BF0D899A1B78D149003F2878 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		BF0D899C1B78DE49003F2878 /* Configure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configure.swift; sourceTree = "<group>"; };
 		BF80D1701B6A4F050098A3F9 /* Mat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mat.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -56,9 +86,16 @@
 		BF80D1911B6A4F060098A3F9 /* MatUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MatUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF80D1951B6A4F060098A3F9 /* MatUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatUITests.swift; sourceTree = "<group>"; };
 		BF80D1971B6A4F060098A3F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BFC09BE91B7D87F3000B0C88 /* HttpTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpTask.swift; sourceTree = "<group>"; };
+		BFDABB871B7C3E7C00E36334 /* MessageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageType.swift; sourceTree = "<group>"; };
+		BFDABB891B7C452200E36334 /* InboxItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InboxItem.swift; sourceTree = "<group>"; };
 		BFE6031B1B79F9BF003E23D3 /* UserManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		BFE6031D1B79FDA0003E23D3 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		BFE6031F1B7A06EB003E23D3 /* HttpUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpUtil.swift; sourceTree = "<group>"; };
+		BFF1AEE71B7C357000B74EDF /* ConfirmItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmItem.swift; sourceTree = "<group>"; };
+		BFF1AEE91B7C35FE00B74EDF /* MessageStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageStatus.swift; sourceTree = "<group>"; };
+		BFF1AEEB1B7C36E200B74EDF /* DateTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTime.swift; sourceTree = "<group>"; };
+		BFF1AEED1B7C39A600B74EDF /* Contact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF08246C1B7AEE4400CECA85 /* libsqlite3.0.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,9 +124,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BF08246A1B7AE09100CECA85 /* FMDB */ = {
+			isa = PBXGroup;
+			children = (
+				BF0824561B7AE07C00CECA85 /* FMDatabase.h */,
+				BF0824571B7AE07C00CECA85 /* FMDatabase.m */,
+				BF0824581B7AE07C00CECA85 /* FMDatabaseAdditions.h */,
+				BF0824591B7AE07C00CECA85 /* FMDatabaseAdditions.m */,
+				BF08245A1B7AE07C00CECA85 /* FMDatabaseAdditionsVariadic.swift */,
+				BF08245B1B7AE07C00CECA85 /* FMDatabasePool.h */,
+				BF08245C1B7AE07C00CECA85 /* FMDatabasePool.m */,
+				BF08245D1B7AE07C00CECA85 /* FMDatabaseQueue.h */,
+				BF08245E1B7AE07C00CECA85 /* FMDatabaseQueue.m */,
+				BF08245F1B7AE07C00CECA85 /* FMDatabaseVariadic.swift */,
+				BF0824601B7AE07C00CECA85 /* FMDB.h */,
+				BF0824611B7AE07C00CECA85 /* FMResultSet.h */,
+				BF0824621B7AE07C00CECA85 /* FMResultSet.m */,
+			);
+			name = FMDB;
+			sourceTree = "<group>";
+		};
 		BF80D1671B6A4F050098A3F9 = {
 			isa = PBXGroup;
 			children = (
+				BF08246B1B7AEE4400CECA85 /* libsqlite3.0.tbd */,
 				BF80D1721B6A4F050098A3F9 /* Mat */,
 				BF80D1891B6A4F050098A3F9 /* MatTests */,
 				BF80D1941B6A4F060098A3F9 /* MatUITests */,
@@ -109,18 +168,18 @@
 		BF80D1721B6A4F050098A3F9 /* Mat */ = {
 			isa = PBXGroup;
 			children = (
+				BF08246A1B7AE09100CECA85 /* FMDB */,
+				BFDABB8B1B7C8BFC00E36334 /* Controller */,
+				BFF1AEE61B7C354C00B74EDF /* Model */,
 				BF80D1731B6A4F050098A3F9 /* AppDelegate.swift */,
-				BF0D899A1B78D149003F2878 /* LoginViewController.swift */,
-				BF80D1751B6A4F050098A3F9 /* MasterViewController.swift */,
-				BF80D1771B6A4F050098A3F9 /* DetailViewController.swift */,
-				BF80D1791B6A4F050098A3F9 /* Main.storyboard */,
-				BF80D17C1B6A4F050098A3F9 /* Assets.xcassets */,
-				BF80D17E1B6A4F050098A3F9 /* LaunchScreen.storyboard */,
-				BF80D1811B6A4F050098A3F9 /* Info.plist */,
 				BF0D899C1B78DE49003F2878 /* Configure.swift */,
-				BFE6031B1B79F9BF003E23D3 /* UserManager.swift */,
-				BFE6031D1B79FDA0003E23D3 /* User.swift */,
 				BFE6031F1B7A06EB003E23D3 /* HttpUtil.swift */,
+				BFC09BE91B7D87F3000B0C88 /* HttpTask.swift */,
+				BF80D1791B6A4F050098A3F9 /* Main.storyboard */,
+				BF80D17E1B6A4F050098A3F9 /* LaunchScreen.storyboard */,
+				BF80D17C1B6A4F050098A3F9 /* Assets.xcassets */,
+				BF80D1811B6A4F050098A3F9 /* Info.plist */,
+				BF0824551B7AE07B00CECA85 /* Mat-Bridging-Header.h */,
 			);
 			path = Mat;
 			sourceTree = "<group>";
@@ -141,6 +200,31 @@
 				BF80D1971B6A4F060098A3F9 /* Info.plist */,
 			);
 			path = MatUITests;
+			sourceTree = "<group>";
+		};
+		BFDABB8B1B7C8BFC00E36334 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				BF0D899A1B78D149003F2878 /* LoginViewController.swift */,
+				BF80D1751B6A4F050098A3F9 /* MasterViewController.swift */,
+				BF80D1771B6A4F050098A3F9 /* DetailViewController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		BFF1AEE61B7C354C00B74EDF /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				BFE6031B1B79F9BF003E23D3 /* UserManager.swift */,
+				BFE6031D1B79FDA0003E23D3 /* User.swift */,
+				BFF1AEE71B7C357000B74EDF /* ConfirmItem.swift */,
+				BFF1AEED1B7C39A600B74EDF /* Contact.swift */,
+				BFF1AEE91B7C35FE00B74EDF /* MessageStatus.swift */,
+				BFDABB871B7C3E7C00E36334 /* MessageType.swift */,
+				BFF1AEEB1B7C36E200B74EDF /* DateTime.swift */,
+				BFDABB891B7C452200E36334 /* InboxItem.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -205,6 +289,7 @@
 		BF80D1681B6A4F050098A3F9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "梁晶";
 				TargetAttributes = {
@@ -275,13 +360,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				BFE6031C1B79F9BF003E23D3 /* UserManager.swift in Sources */,
+				BFF1AEEE1B7C39A600B74EDF /* Contact.swift in Sources */,
+				BFC09BEA1B7D87F3000B0C88 /* HttpTask.swift in Sources */,
+				BFF1AEEA1B7C35FE00B74EDF /* MessageStatus.swift in Sources */,
+				BFDABB881B7C3E7C00E36334 /* MessageType.swift in Sources */,
+				BF0824661B7AE07C00CECA85 /* FMDatabasePool.m in Sources */,
 				BF0D899B1B78D149003F2878 /* LoginViewController.swift in Sources */,
 				BF80D1781B6A4F050098A3F9 /* DetailViewController.swift in Sources */,
+				BF0824671B7AE07C00CECA85 /* FMDatabaseQueue.m in Sources */,
+				BF0824631B7AE07C00CECA85 /* FMDatabase.m in Sources */,
 				BF80D1761B6A4F050098A3F9 /* MasterViewController.swift in Sources */,
 				BF80D1741B6A4F050098A3F9 /* AppDelegate.swift in Sources */,
 				BF0D899D1B78DE49003F2878 /* Configure.swift in Sources */,
+				BFF1AEE81B7C357000B74EDF /* ConfirmItem.swift in Sources */,
+				BF0824691B7AE07C00CECA85 /* FMResultSet.m in Sources */,
 				BFE6031E1B79FDA0003E23D3 /* User.swift in Sources */,
+				BFDABB8A1B7C452200E36334 /* InboxItem.swift in Sources */,
+				BF0824681B7AE07C00CECA85 /* FMDatabaseVariadic.swift in Sources */,
 				BFE603201B7A06EB003E23D3 /* HttpUtil.swift in Sources */,
+				BF0824641B7AE07C00CECA85 /* FMDatabaseAdditions.m in Sources */,
+				BFF1AEEC1B7C36E200B74EDF /* DateTime.swift in Sources */,
+				BF0824651B7AE07C00CECA85 /* FMDatabaseAdditionsVariadic.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -423,6 +522,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Mat/Info.plist;
@@ -431,6 +531,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.leopub.Mat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Mat/Mat-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -438,6 +540,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Mat/Info.plist;
@@ -446,6 +549,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.leopub.Mat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Mat/Mat-Bridging-Header.h";
 			};
 			name = Release;
 		};
