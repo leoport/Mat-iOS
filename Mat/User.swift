@@ -13,6 +13,7 @@ class User {
     var sessionId: String
     var cookieId: String
     var database: FMDatabase
+    var lastUpdateTimestamp : DateTime
 
     required init(userId: Int) {
         self.userId = userId
@@ -23,7 +24,9 @@ class User {
         if !database.open() {
             print("User:init failed to open database")
         }
+        lastUpdateTimestamp = DateTime(timeIntervalSince1970: 0)
         initDatabase()
+        initTimestamp()
     }
     deinit {
         if !database.close() {
@@ -67,6 +70,10 @@ class User {
             //print(contactsJSON)
             updateContacts(contactsJSON as! Array<Dictionary<String, String>>)
             updateIndox(jsonObj["inbox"] as! Array<Dictionary<String, String>>)
+            let timestamp = jsonObj["timestamp"] as! String
+            lastUpdateTimestamp = DateTime(date : timestamp)
+            addUpdateRecord(timestamp, length: data.lengthOfBytesUsingEncoding(NSUTF8StringEncoding), isDataUpdated: true)
+            print("Current Timestamp: " + lastUpdateTimestamp.toCompleteString())
         } catch {
             fatalError("failed to parse json")
         }
@@ -112,7 +119,7 @@ class User {
         var title = ""
         if let res = database.executeQuery(sql, withArgumentsInArray: nil) {
             if res.next() {
-                let name = String(res.intForColumn("name"))
+                let name = res.stringForColumn("name")
                 let type = res.stringForColumn("type")
                 if (type == "T") {
                     title = name + "老师"
@@ -122,5 +129,39 @@ class User {
             }
         }
         return title
+    }
+    func initTimestamp() {
+        let sql = "SELECT timestamp FROM sync_record WHERE updated=1 ORDER BY timestamp DESC LIMIT 1;";
+        if let res = database.executeQuery(sql) {
+            if res.next() {
+                lastUpdateTimestamp = DateTime(date: res.stringForColumnIndex(0))
+                print("User:initTimestamp: load last update timestamp" + lastUpdateTimestamp.toCompleteString())
+            }
+        }
+    }
+    func addUpdateRecord(timestamp : String, length : Int, isDataUpdated : Bool) {
+        let sql = String(format : "INSERT INTO sync_record VALUES(NULL, '%@', '%d', '%d');", timestamp, length, isDataUpdated ? 1 : 0);
+        database.executeUpdate(sql)
+    }
+    func getInboxItemsPrime(suffix : String) -> [InboxItem] {
+        var items = [InboxItem]()
+        let sql = "SELECT msg_id, src_id, src_title, type, start_time, end_time, place, text, status, timestamp FROM inbox " + suffix;
+        if let res = database.executeQuery(sql) {
+            while res.next() {
+                let item = InboxItem();
+                item.mMsgId = Int(res.intForColumnIndex(0))
+                item.mSrcId = Int(res.intForColumnIndex(1))
+                item.mSrcTitle = res.stringForColumnIndex(2)
+                item.mType = MessageType(rawValue: Int(res.intForColumnIndex(3)))!
+                item.mStartTime = DateTime(date : res.stringForColumnIndex(4))
+                item.mEndTime = DateTime(date : res.stringForColumnIndex(5))
+                item.mPlace = res.stringForColumnIndex(6)
+                item.mText = res.stringForColumnIndex(7)
+                item.mStatus = MessageStatus(rawValue: Int(res.intForColumnIndex(8)))!
+                item.mTimestamp = DateTime(date: res.stringForColumnIndex(9))
+                items.append(item)
+            }
+        }
+        return items
     }
 }

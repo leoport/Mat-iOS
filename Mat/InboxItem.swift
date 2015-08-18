@@ -8,16 +8,16 @@
 
 import Foundation
 class InboxItem {
-    private var mMsgId : Int
-    private var mSrcId : Int
-    private var mSrcTitle : String
-    private var mType : MessageType
-    private var mStatus : MessageStatus
-    private var mTimestamp : DateTime
-    private var mStartTime : DateTime
-    private var mEndTime : DateTime
-    private var mPlace : String
-    private var mText : String
+    var mMsgId : Int
+    var mSrcId : Int
+    var mSrcTitle : String
+    var mType : MessageType
+    var mStatus : MessageStatus
+    var mTimestamp : DateTime
+    var mStartTime : DateTime
+    var mEndTime : DateTime
+    var mPlace : String
+    var mText : String
 
     required init() {
         mMsgId = 0
