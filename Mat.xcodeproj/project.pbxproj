@@ -35,6 +35,7 @@
 		BFF1AEEA1B7C35FE00B74EDF /* MessageStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF1AEE91B7C35FE00B74EDF /* MessageStatus.swift */; };
 		BFF1AEEC1B7C36E200B74EDF /* DateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF1AEEB1B7C36E200B74EDF /* DateTime.swift */; };
 		BFF1AEEE1B7C39A600B74EDF /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF1AEED1B7C39A600B74EDF /* Contact.swift */; };
+		BFFC14B61B835C4500D47DEE /* MasterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFC14B51B835C4500D47DEE /* MasterTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +97,7 @@
 		BFF1AEE91B7C35FE00B74EDF /* MessageStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageStatus.swift; sourceTree = "<group>"; };
 		BFF1AEEB1B7C36E200B74EDF /* DateTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTime.swift; sourceTree = "<group>"; };
 		BFF1AEED1B7C39A600B74EDF /* Contact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		BFFC14B51B835C4500D47DEE /* MasterTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,6 +208,7 @@
 			isa = PBXGroup;
 			children = (
 				BF0D899A1B78D149003F2878 /* LoginViewController.swift */,
+				BFFC14B51B835C4500D47DEE /* MasterTableViewCell.swift */,
 				BF80D1751B6A4F050098A3F9 /* MasterViewController.swift */,
 				BF80D1771B6A4F050098A3F9 /* DetailViewController.swift */,
 			);
@@ -376,6 +379,7 @@
 				BF0824691B7AE07C00CECA85 /* FMResultSet.m in Sources */,
 				BFE6031E1B79FDA0003E23D3 /* User.swift in Sources */,
 				BFDABB8A1B7C452200E36334 /* InboxItem.swift in Sources */,
+				BFFC14B61B835C4500D47DEE /* MasterTableViewCell.swift in Sources */,
 				BF0824681B7AE07C00CECA85 /* FMDatabaseVariadic.swift in Sources */,
 				BFE603201B7A06EB003E23D3 /* HttpUtil.swift in Sources */,
 				BF0824641B7AE07C00CECA85 /* FMDatabaseAdditions.m in Sources */,

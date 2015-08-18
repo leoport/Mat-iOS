@@ -84,10 +84,13 @@ class MasterViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! MasterTableViewCell
 
         let item = items[indexPath.row]
-        cell.textLabel!.text = item.mSrcTitle + " " + item.mText
+        //cell.textLabel!.text = item.mSrcTitle + " " + item.mText
+        cell.mainLabel.text = item.mText
+        cell.leftHintLabel.text = item.mSrcTitle
+        cell.icon.image = UIImage(named: "Unread")
         return cell
     }
 
