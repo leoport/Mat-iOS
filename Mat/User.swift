@@ -143,7 +143,7 @@ class User {
         let sql = String(format : "INSERT INTO sync_record VALUES(NULL, '%@', '%d', '%d');", timestamp, length, isDataUpdated ? 1 : 0);
         database.executeUpdate(sql)
     }
-    func getInboxItemsPrime(suffix : String) -> [InboxItem] {
+    private func getInboxItemsPrime(suffix : String) -> [InboxItem] {
         var items = [InboxItem]()
         let sql = "SELECT msg_id, src_id, src_title, type, start_time, end_time, place, text, status, timestamp FROM inbox " + suffix;
         if let res = database.executeQuery(sql) {
@@ -164,4 +164,8 @@ class User {
         }
         return items
     }
+    func getUndoneInboxItems() -> [InboxItem] {
+        return getInboxItemsPrime("WHERE status < 2 ORDER BY status, type, end_time, timestamp DESC;")
+    }
+
 }

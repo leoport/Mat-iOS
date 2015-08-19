@@ -38,7 +38,7 @@ class MasterViewController: UITableViewController {
         }
         super.viewWillAppear(animated)
         if let user = UserManager.getInstance().getCurrentUser() {
-            items = user.getInboxItemsPrime("")
+            items = user.getUndoneInboxItems()
         } else {
             performSegueWithIdentifier("logout", sender: nil)
         }
@@ -90,7 +90,19 @@ class MasterViewController: UITableViewController {
         //cell.textLabel!.text = item.mSrcTitle + " " + item.mText
         cell.mainLabel.text = item.mText
         cell.leftHintLabel.text = item.mSrcTitle
-        cell.icon.image = UIImage(named: "Unread")
+        if item.mStatus == MessageStatus.Init {
+            cell.icon.image = UIImage(named: "Unread")
+            cell.rightHintLabel.textColor = UIColor.redColor()
+            cell.rightHintLabel.text = "未确认"
+        } else if item.mType == MessageType.Text {
+            cell.icon.image = UIImage(named: "Alert")
+        } else if item.mType == MessageType.Event {
+            cell.icon.image = UIImage(named: "Calendar")
+            cell.rightHintLabel.text = item.mStartTime.toSimpleString() + "开始"
+        } else if item.mType == MessageType.Task {
+            cell.icon.image = UIImage(named: "Task")
+            cell.rightHintLabel.text = "截至" + item.mEndTime.toSimpleString()
+        }
         return cell
     }
 
