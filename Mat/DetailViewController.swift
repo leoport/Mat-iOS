@@ -86,6 +86,10 @@ class DetailViewController: UIViewController {
             if user.isLogedIn() {
                 do {
                     try user.sync(response as String)
+                    if let tableViewController = controller.navigationController?.viewControllers[0] as? MasterViewController {
+                        tableViewController.items = user.getUndoneInboxItems()
+                        tableViewController.tableView.reloadData()
+                    }
                     controller.navigationController!.popViewControllerAnimated(true)
                 } catch {
                     controller.view.makeToast(message: "网络数据错误")

@@ -239,7 +239,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="aW8-Ni-ina">
-                        <barButtonItem key="rightBarButtonItem" title="Logout" id="UfO-nU-4Tv">
+                        <barButtonItem key="rightBarButtonItem" title="退出" id="UfO-nU-4Tv">
                             <connections>
                                 <action selector="onLogout:" destination="7bK-jq-Zjz" id="6S2-59-xi3"/>
                                 <segue destination="yHN-1y-7IL" kind="popoverPresentation" identifier="logout" popoverAnchorBarButtonItem="UfO-nU-4Tv" id="pI8-32-fW2">

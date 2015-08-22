@@ -150,6 +150,10 @@ class MasterViewController: UITableViewController {
         let url = String(format: Configure.MSG_FETCH_URL, user!.lastUpdateTimestamp.toDigitString())
         msgTask!.get(url)
     }
+    @IBAction func unwindFromDetail(sender: UIStoryboardSegue) {
+        items = UserManager.getInstance().getCurrentUser()!.getUndoneInboxItems()
+        tableView.reloadData()
+    }
     class MessageTask : HttpTask {
         var user : User
         var controller : MasterViewController

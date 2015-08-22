@@ -83,7 +83,7 @@ class LoginViewController: UIViewController {
     }
     func initUserData() {
         var initUserDataTask = InitUserDataTask(controller : self)
-        let url = String(format: Configure.MSG_FETCH_URL, DateTime(timeIntervalSince1970: 0).toDigitString())
+        let url = String(format: Configure.MSG_FETCH_URL, user!.lastUpdateTimestamp.toDigitString())
         initUserDataTask.get(url)
     }
 
