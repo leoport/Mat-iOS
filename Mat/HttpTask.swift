@@ -15,27 +15,36 @@ protocol HttpTask {
 
 extension HttpTask {
     func completionHandler(data: NSData?, response: NSURLResponse?, error: NSError?) -> Void {
-        let httpResponse = response as! NSHTTPURLResponse
+        /*
         var headers = httpResponse.allHeaderFields;
         if let cookiesHeader = headers["Set-Cookie"] {
+            user.cookieId = ""
             let cookies = cookiesHeader as! String
             for item in cookies.componentsSeparatedByString(" ") {
                 let keyValue = item.componentsSeparatedByString("=")
                 if (keyValue[0] == "COOKIEID") {
-                    user.sessionId = keyValue[1]
                     user.cookieId = keyValue[1]
+                } else if (keyValue[0] == "PHPSESSID") {
+                    user.sessionId = keyValue[1].stringByReplacingOccurrencesOfString(";", withString: "")
                 }
             }
-        } else {
-            user.cookieId = ""
-        }
+        } */
         var content : NSString
         if (data == nil) {
             content = NSString(string: "")
         } else {
             content = NSString(data: data!, encoding: NSUTF8StringEncoding)!
         }
-        postExcute(content)
+        if let cookies = NSHTTPCookieStorage.sharedHTTPCookieStorage().cookies {
+            for cookie in cookies {
+                if cookie.name == "COOKIEID" {
+                    user.cookieId = cookie.value
+                } else if cookie.name == "PHPSESSID" {
+                    user.sessionId = cookie.value
+                }
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), { self.postExcute(content) })
     }
 
     mutating func get(url : String) {
@@ -44,6 +53,7 @@ extension HttpTask {
         request.HTTPMethod = "GET"
         request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.addValue("en-us", forHTTPHeaderField: "Content-Language")
+        setCookies()
         let dataTask = session.dataTaskWithRequest(request, completionHandler: completionHandler)
         dataTask.resume()
     }
@@ -64,7 +74,27 @@ extension HttpTask {
         request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.addValue("en-us", forHTTPHeaderField: "Content-Language")
         request.addValue(String(request.HTTPBody!.length), forHTTPHeaderField: "Content-Length")
+        setCookies()
         let dataTask = session.dataTaskWithRequest(request, completionHandler: completionHandler)
         dataTask.resume()
+    }
+
+    private func setCookies() {
+        if user.isLogedIn() {
+            let properties1 = [
+                NSHTTPCookieDomain : "leopub.org",
+                NSHTTPCookiePath : "/",
+                NSHTTPCookieName : "COOKIEID",
+                NSHTTPCookieValue : user.cookieId]
+            let cookie1 = NSHTTPCookie(properties: properties1)
+            let properties2 = [
+                NSHTTPCookieDomain : "leopub.org",
+                NSHTTPCookiePath : "/",
+                NSHTTPCookieName : "USERNAME",
+                NSHTTPCookieValue : String(user.userId)]
+            let cookie2 = NSHTTPCookie(properties: properties2)
+            NSHTTPCookieStorage.sharedHTTPCookieStorage().setCookie(cookie1!)
+            NSHTTPCookieStorage.sharedHTTPCookieStorage().setCookie(cookie2!)
+        }
     }
 }

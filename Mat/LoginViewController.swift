@@ -83,7 +83,8 @@ class LoginViewController: UIViewController {
     }
     func initUserData() {
         var initUserDataTask = InitUserDataTask(controller : self)
-        initUserDataTask.get(Configure.MSG_FETCH_URL)
+        let url = String(format: Configure.MSG_FETCH_URL, DateTime(timeIntervalSince1970: 0).toDigitString())
+        initUserDataTask.get(url)
     }
 
     class LoginTask : HttpTask {
@@ -114,8 +115,22 @@ class LoginViewController: UIViewController {
             self.user = controller.user!
         }
         func postExcute(response: NSString) {
-            user.sync(response as String)
-            controller.dismissViewControllerAnimated(true, completion: nil)
+            if user.isLogedIn() {
+                do {
+                    try user.sync(response as String)
+                } catch {
+                    controller.view.makeToast(message: "网络数据错误")
+                    controller.usernameTextField.enabled = true
+                    controller.passwordTextField.enabled = true
+                    controller.loginButton.enabled = true
+                }
+                controller.dismissViewControllerAnimated(true, completion: nil)
+            } else {
+                controller.view.makeToast(message: "验证用户失败")
+                controller.usernameTextField.enabled = true
+                controller.passwordTextField.enabled = true
+                controller.loginButton.enabled = true
+            }
         }
     }
 }

@@ -17,6 +17,8 @@
 		BF08246C1B7AEE4400CECA85 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BF08246B1B7AEE4400CECA85 /* libsqlite3.0.tbd */; };
 		BF0D899B1B78D149003F2878 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0D899A1B78D149003F2878 /* LoginViewController.swift */; };
 		BF0D899D1B78DE49003F2878 /* Configure.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0D899C1B78DE49003F2878 /* Configure.swift */; };
+		BF3A067E1B86CA37004E7F06 /* MatError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3A067D1B86CA37004E7F06 /* MatError.swift */; };
+		BF3A06801B86D145004E7F06 /* HRToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3A067F1B86D145004E7F06 /* HRToast.swift */; };
 		BF80D1741B6A4F050098A3F9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF80D1731B6A4F050098A3F9 /* AppDelegate.swift */; };
 		BF80D1761B6A4F050098A3F9 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF80D1751B6A4F050098A3F9 /* MasterViewController.swift */; };
 		BF80D1781B6A4F050098A3F9 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF80D1771B6A4F050098A3F9 /* DetailViewController.swift */; };
@@ -30,7 +32,6 @@
 		BFDABB8A1B7C452200E36334 /* InboxItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDABB891B7C452200E36334 /* InboxItem.swift */; };
 		BFE6031C1B79F9BF003E23D3 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE6031B1B79F9BF003E23D3 /* UserManager.swift */; };
 		BFE6031E1B79FDA0003E23D3 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE6031D1B79FDA0003E23D3 /* User.swift */; };
-		BFE603201B7A06EB003E23D3 /* HttpUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE6031F1B7A06EB003E23D3 /* HttpUtil.swift */; };
 		BFF1AEE81B7C357000B74EDF /* ConfirmItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF1AEE71B7C357000B74EDF /* ConfirmItem.swift */; };
 		BFF1AEEA1B7C35FE00B74EDF /* MessageStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF1AEE91B7C35FE00B74EDF /* MessageStatus.swift */; };
 		BFF1AEEC1B7C36E200B74EDF /* DateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF1AEEB1B7C36E200B74EDF /* DateTime.swift */; };
@@ -73,6 +74,8 @@
 		BF08246B1B7AEE4400CECA85 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		BF0D899A1B78D149003F2878 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		BF0D899C1B78DE49003F2878 /* Configure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configure.swift; sourceTree = "<group>"; };
+		BF3A067D1B86CA37004E7F06 /* MatError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatError.swift; sourceTree = "<group>"; };
+		BF3A067F1B86D145004E7F06 /* HRToast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HRToast.swift; sourceTree = "<group>"; };
 		BF80D1701B6A4F050098A3F9 /* Mat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF80D1731B6A4F050098A3F9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BF80D1751B6A4F050098A3F9 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
@@ -92,7 +95,6 @@
 		BFDABB891B7C452200E36334 /* InboxItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InboxItem.swift; sourceTree = "<group>"; };
 		BFE6031B1B79F9BF003E23D3 /* UserManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		BFE6031D1B79FDA0003E23D3 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		BFE6031F1B7A06EB003E23D3 /* HttpUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpUtil.swift; sourceTree = "<group>"; };
 		BFF1AEE71B7C357000B74EDF /* ConfirmItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmItem.swift; sourceTree = "<group>"; };
 		BFF1AEE91B7C35FE00B74EDF /* MessageStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageStatus.swift; sourceTree = "<group>"; };
 		BFF1AEEB1B7C36E200B74EDF /* DateTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTime.swift; sourceTree = "<group>"; };
@@ -175,7 +177,6 @@
 				BFF1AEE61B7C354C00B74EDF /* Model */,
 				BF80D1731B6A4F050098A3F9 /* AppDelegate.swift */,
 				BF0D899C1B78DE49003F2878 /* Configure.swift */,
-				BFE6031F1B7A06EB003E23D3 /* HttpUtil.swift */,
 				BFC09BE91B7D87F3000B0C88 /* HttpTask.swift */,
 				BF80D1791B6A4F050098A3F9 /* Main.storyboard */,
 				BF80D17E1B6A4F050098A3F9 /* LaunchScreen.storyboard */,
@@ -211,6 +212,7 @@
 				BFFC14B51B835C4500D47DEE /* MasterTableViewCell.swift */,
 				BF80D1751B6A4F050098A3F9 /* MasterViewController.swift */,
 				BF80D1771B6A4F050098A3F9 /* DetailViewController.swift */,
+				BF3A067F1B86D145004E7F06 /* HRToast.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -226,6 +228,7 @@
 				BFDABB871B7C3E7C00E36334 /* MessageType.swift */,
 				BFF1AEEB1B7C36E200B74EDF /* DateTime.swift */,
 				BFDABB891B7C452200E36334 /* InboxItem.swift */,
+				BF3A067D1B86CA37004E7F06 /* MatError.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -375,13 +378,14 @@
 				BF80D1761B6A4F050098A3F9 /* MasterViewController.swift in Sources */,
 				BF80D1741B6A4F050098A3F9 /* AppDelegate.swift in Sources */,
 				BF0D899D1B78DE49003F2878 /* Configure.swift in Sources */,
+				BF3A067E1B86CA37004E7F06 /* MatError.swift in Sources */,
 				BFF1AEE81B7C357000B74EDF /* ConfirmItem.swift in Sources */,
 				BF0824691B7AE07C00CECA85 /* FMResultSet.m in Sources */,
 				BFE6031E1B79FDA0003E23D3 /* User.swift in Sources */,
 				BFDABB8A1B7C452200E36334 /* InboxItem.swift in Sources */,
+				BF3A06801B86D145004E7F06 /* HRToast.swift in Sources */,
 				BFFC14B61B835C4500D47DEE /* MasterTableViewCell.swift in Sources */,
 				BF0824681B7AE07C00CECA85 /* FMDatabaseVariadic.swift in Sources */,
-				BFE603201B7A06EB003E23D3 /* HttpUtil.swift in Sources */,
 				BF0824641B7AE07C00CECA85 /* FMDatabaseAdditions.m in Sources */,
 				BFF1AEEC1B7C36E200B74EDF /* DateTime.swift in Sources */,
 				BF0824651B7AE07C00CECA85 /* FMDatabaseAdditionsVariadic.swift in Sources */,

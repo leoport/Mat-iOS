@@ -63,7 +63,7 @@ class User {
     func isLogedIn() -> Bool {
         return !cookieId.isEmpty
     }
-    func sync(data : String) {
+    func sync(data : String) throws {
         do {
             let jsonObj = try NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
             let contactsJSON = jsonObj["contact"]
@@ -75,7 +75,7 @@ class User {
             addUpdateRecord(timestamp, length: data.lengthOfBytesUsingEncoding(NSUTF8StringEncoding), isDataUpdated: true)
             print("Current Timestamp: " + lastUpdateTimestamp.toCompleteString())
         } catch {
-            fatalError("failed to parse json")
+            throw MatError.NetworkDataError
         }
     }
     func updateContacts(json : Array<Dictionary<String, String>>) {
