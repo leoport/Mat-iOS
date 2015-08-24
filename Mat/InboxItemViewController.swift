@@ -8,16 +8,16 @@
 
 import UIKit
 
-class DetailViewController: UIViewController {
+class InboxItemViewController: UIViewController {
 
-    @IBOutlet weak var detailTextView: UITextView!
+    @IBOutlet weak var contentTextView: UITextView!
     @IBOutlet weak var confirmBarButton: UIBarButtonItem!
     @IBOutlet weak var ignoreBarButton: UIBarButtonItem!
     @IBOutlet weak var completeBarButton: UIBarButtonItem!
-    var msgTask : MsgTask?
+    var syncMessageTask : SyncMessageTask?
 
 
-    var detailItem: InboxItem? {
+    var item: InboxItem? {
         didSet {
             // Update the view.
             self.configureView()
@@ -26,17 +26,19 @@ class DetailViewController: UIViewController {
 
     func configureView() {
         // Update the user interface for the detail item.
-        if let detail = self.detailItem {
-            if let textView = self.detailTextView {
-                textView.text = "发件人: " + detail.mSrcTitle + "\n"
-                    + "发件时间: " + detail.mTimestamp.toSimpleString() + "\n\n"
-                    + "内容: " + detail.mText
-                if detail.mType != MessageType.Text {
+        if let item = self.item {
+            if let textView = self.contentTextView {
+                textView.text = "发件人: " + item.srcTitle + "\n"
+                    + "发件时间: " + item.timestamp.simpleString + "\n\n"
+                    + "内容: " + item.text
+                if item.type != MessageType.Text {
                     textView.text = textView.text + "\n\n"
-                        + "开始时间: " + detail.mStartTime.toSimpleString() + "\n"
-                        + "结束时间: " + detail.mEndTime.toSimpleString()
-                    
+                        + "开始时间: " + item.startTime.simpleString + "\n"
+                        + "结束时间: " + item.endTime.simpleString
                 }
+            }
+            if item.status != MessageStatus.Init {
+                confirmBarButton.enabled = false
             }
         }
     }
@@ -56,28 +58,33 @@ class DetailViewController: UIViewController {
         navigationController!.popViewControllerAnimated(true)
     }
     @IBAction func onConfirm(sender: UIBarButtonItem) {
-        //navigationController!.popViewControllerAnimated(true)
+        enableSyncButton(false)
         setMessageStatus(MessageStatus.Confirmed)
     }
     @IBAction func onIgnore(sender: UIBarButtonItem) {
-        //navigationController!.popViewControllerAnimated(true)
+        enableSyncButton(false)
         setMessageStatus(MessageStatus.Ignored)
     }
     @IBAction func onComplete(sender: UIBarButtonItem) {
-        //navigationController!.popViewControllerAnimated(true)
+        enableSyncButton(false)
         setMessageStatus(MessageStatus.Accomplished)
     }
+    private func enableSyncButton (enabled : Bool) {
+        confirmBarButton.enabled = enabled
+        ignoreBarButton.enabled = enabled
+        completeBarButton.enabled = enabled
+    }
     private func setMessageStatus(newStatus : MessageStatus) {
-        msgTask = MsgTask(controller: self)
+        syncMessageTask = SyncMessageTask(controller: self)
         let user = UserManager.getInstance().getCurrentUser()!
-        let url = String(format: Configure.MSG_CONFIRM_URL, detailItem!.mSrcId, detailItem!.mMsgId, newStatus.rawValue, user.lastUpdateTimestamp.toDigitString())
-        msgTask!.get(url)
+        let url = String(format: Configure.MSG_CONFIRM_URL, item!.srcId, item!.msgId, newStatus.rawValue, user.dataTimestamp.digitString)
+        syncMessageTask!.get(url)
     }
 
-    class MsgTask : HttpTask {
+    class SyncMessageTask : HttpTask {
         var user : User
-        var controller : DetailViewController
-        required init(controller : DetailViewController) {
+        var controller : InboxItemViewController
+        required init(controller : InboxItemViewController) {
             self.controller = controller
             self.user = UserManager.getInstance().getCurrentUser()!
         }
@@ -86,16 +93,19 @@ class DetailViewController: UIViewController {
             if user.isLogedIn() {
                 do {
                     try user.sync(response as String)
-                    if let tableViewController = controller.navigationController?.viewControllers[0] as? MasterViewController {
+                    /*
+                    if let tableViewController = controller.navigationController?.viewControllers[0] as? MainViewController {
                         tableViewController.items = user.getUndoneInboxItems()
                         tableViewController.tableView.reloadData()
-                    }
+                    } */
                     controller.navigationController!.popViewControllerAnimated(true)
                 } catch {
                     controller.view.makeToast(message: "网络数据错误")
+                    controller.enableSyncButton(true)
                 }
             } else {
                 controller.view.makeToast(message: "验证用户失败")
+                controller.enableSyncButton(true)
             }
         }
     }

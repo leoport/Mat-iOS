@@ -8,38 +8,47 @@
 
 import Foundation
 
-class DateTime {
-    private var mDate : NSDate
+class DateTime : Equatable {
+    private var date : NSDate
     private static let completeFormatter : NSDateFormatter = DateFormatterWrapper(format : "yyyy-MM-dd HH:mm:ss")
     private static let monthAndDayFormat : NSDateFormatter = DateFormatterWrapper(format : "MM-dd")
     private static let onlyDateFormat    : NSDateFormatter = DateFormatterWrapper(format : "yyyy-MM-dd")
     private static let simpleDateFormat  : NSDateFormatter = DateFormatterWrapper(format : "MM月dd日 HH点mm分")
     private static let digitDateFormat   : NSDateFormatter = DateFormatterWrapper(format : "yyyyMMddHHmmss")
 
+    var completeString : String {
+        get {
+            return DateTime.completeFormatter.stringFromDate(date)
+        }
+    }
+
+    var simpleString : String {
+        get {
+            return DateTime.simpleDateFormat.stringFromDate(date)
+        }
+    }
+
+    var digitString : String {
+        get {
+            return DateTime.digitDateFormat.stringFromDate(date)
+        }
+    }
 
     required init() {
-        mDate = NSDate()
+        date = NSDate()
     }
     required init(timeIntervalSince1970: NSTimeInterval) {
-        mDate = NSDate(timeIntervalSince1970: timeIntervalSince1970)
+        date = NSDate(timeIntervalSince1970: timeIntervalSince1970)
     }
-    required init(date : String) {
-        if let d = DateTime.completeFormatter.dateFromString(date) {
-            mDate = d
+    required init(datetimeString : String) {
+        if (datetimeString == "0000-00-00 00:00:00") {
+            date = NSDate()
+        } else if let tempDate = DateTime.completeFormatter.dateFromString(datetimeString) {
+            date = tempDate
         } else {
-            print("failed to format date: " + date)
-            mDate = NSDate(timeIntervalSince1970: 0)
+            print("failed to format date: " + datetimeString)
+            date = NSDate(timeIntervalSince1970: 0)
         }
-        //mDate = DateTime.completeFormatter.dateFromString(date)!
-    }
-    func toCompleteString() -> String {
-        return DateTime.completeFormatter.stringFromDate(mDate)
-    }
-    func toSimpleString() -> String {
-        return DateTime.simpleDateFormat.stringFromDate(mDate)
-    }
-    func toDigitString() -> String {
-        return DateTime.digitDateFormat.stringFromDate(mDate)
     }
     private class DateFormatterWrapper : NSDateFormatter {
         convenience init(format : String) {
@@ -47,4 +56,8 @@ class DateTime {
             super.dateFormat = format
         }
     }
+}
+
+func ==(lhs: DateTime, rhs: DateTime) -> Bool {
+    return lhs.date == rhs.date
 }

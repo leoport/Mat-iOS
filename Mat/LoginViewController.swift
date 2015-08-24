@@ -50,40 +50,10 @@ class LoginViewController: UIViewController {
         loginTask = LoginTask(controller: self)
         let dict = ["username": username, "password": password]
         loginTask?.post(Configure.LOGIN_URL, params: dict)
-        /*
-        func handleCompletion(data: NSData?, response: NSURLResponse?, error: NSError?) -> Void {
-            //let newStr = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
-            let httpResponse = response as! NSHTTPURLResponse
-            var headers = httpResponse.allHeaderFields;
-            let cookies = headers["Set-Cookie"] as! String
-            for item in cookies.componentsSeparatedByString(" ") {
-                let keyValue = item.componentsSeparatedByString("=")
-                if (keyValue[0] == "COOKIEID") {
-                    let user = User(userId: Int(username)!)
-                    user.sessionId = keyValue[1]
-                    user.cookieId = keyValue[1]
-                    UserManager.getInstance().setCurrentUser(user)
-                    dismissViewControllerAnimated(true, completion: nil)
-                }
-            }
-            usernameTextField.enabled = true
-            passwordTextField.enabled = true
-            loginButton.enabled = true
-        }
-        let params = "username=" + username + "&password=" + password;
-        let session = NSURLSession.sharedSession()
-        let request = NSMutableURLRequest(URL: NSURL(string: Configure.LOGIN_URL)!)
-        request.HTTPMethod = "POST"
-        request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding)
-        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.addValue("en-us", forHTTPHeaderField: "Content-Language")
-        request.addValue(String(request.HTTPBody!.length), forHTTPHeaderField: "Content-Length")
-        let dataTask = session.dataTaskWithRequest(request, completionHandler: handleCompletion)
-        dataTask.resume() */
     }
     func initUserData() {
         var initUserDataTask = InitUserDataTask(controller : self)
-        let url = String(format: Configure.MSG_FETCH_URL, user!.lastUpdateTimestamp.toDigitString())
+        let url = String(format: Configure.MSG_FETCH_URL, user!.dataTimestamp.digitString)
         initUserDataTask.get(url)
     }
 
@@ -98,7 +68,6 @@ class LoginViewController: UIViewController {
         func postExcute(response: NSString) {
             if controller.user!.isLogedIn() {
                 UserManager.getInstance().setCurrentUser(controller.user)
-                //controller.dismissViewControllerAnimated(true, completion: nil)
                 controller.initUserData()
             } else {
                 controller.usernameTextField.enabled = true
@@ -123,6 +92,10 @@ class LoginViewController: UIViewController {
                     controller.usernameTextField.enabled = true
                     controller.passwordTextField.enabled = true
                     controller.loginButton.enabled = true
+                }
+                if let tableViewController = controller.navigationController?.viewControllers[0] as? MainViewController {
+                    tableViewController.items = user.getUndoneInboxItems()
+                    tableViewController.tableView.reloadData()
                 }
                 controller.dismissViewControllerAnimated(true, completion: nil)
             } else {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MasterTableViewCell: UITableViewCell {
+class MainTableViewCell: UITableViewCell {
     @IBOutlet weak var icon: UIImageView!
     @IBOutlet weak var mainLabel: UILabel!
     @IBOutlet weak var leftHintLabel: UILabel!

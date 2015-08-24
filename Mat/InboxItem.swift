@@ -8,27 +8,27 @@
 
 import Foundation
 class InboxItem {
-    var mMsgId : Int
-    var mSrcId : Int
-    var mSrcTitle : String
-    var mType : MessageType
-    var mStatus : MessageStatus
-    var mTimestamp : DateTime
-    var mStartTime : DateTime
-    var mEndTime : DateTime
-    var mPlace : String
-    var mText : String
+    var msgId : Int
+    var srcId : Int
+    var srcTitle : String
+    var type : MessageType
+    var status : MessageStatus
+    var timestamp : DateTime
+    var startTime : DateTime
+    var endTime : DateTime
+    var place : String
+    var text : String
 
     required init() {
-        mMsgId = 0
-        mSrcId = 0
-        mSrcTitle = ""
-        mType = MessageType.Text
-        mStatus = MessageStatus.Init
-        mTimestamp = DateTime()
-        mStartTime = DateTime()
-        mEndTime = DateTime()
-        mPlace = ""
-        mText = ""
+        msgId = 0
+        srcId = 0
+        srcTitle = ""
+        type = MessageType.Text
+        status = MessageStatus.Init
+        timestamp = DateTime()
+        startTime = DateTime()
+        endTime = DateTime()
+        place = ""
+        text = ""
     }
 }

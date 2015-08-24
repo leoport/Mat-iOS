@@ -8,12 +8,13 @@
 
 import Foundation
 
-class User {
+class User : Equatable {
     var userId: Int
     var sessionId: String
     var cookieId: String
     var database: FMDatabase
-    var lastUpdateTimestamp : DateTime
+    var dataTimestamp : DateTime
+
 
     required init(userId: Int) {
         self.userId = userId
@@ -24,7 +25,7 @@ class User {
         if !database.open() {
             print("User:init failed to open database")
         }
-        lastUpdateTimestamp = DateTime(timeIntervalSince1970: 0)
+        dataTimestamp = DateTime(timeIntervalSince1970: 0)
         initDatabase()
         initTimestamp()
     }
@@ -33,6 +34,7 @@ class User {
             print("failed to close database")
         }
     }
+
     func initDatabase() {
         // create table contact
         let query = "CREATE TABLE IF NOT EXISTS contact (`id` integer PRIMARY KEY, name varchar(255), name_char varchar(10), type char, unit varchar(10), title varchar(10), `f` integer, `b` integer, `t` integer, timestamp timestamp);"
@@ -71,9 +73,9 @@ class User {
             updateContacts(contactsJSON as! Array<Dictionary<String, String>>)
             updateIndox(jsonObj["inbox"] as! Array<Dictionary<String, String>>)
             let timestamp = jsonObj["timestamp"] as! String
-            lastUpdateTimestamp = DateTime(date : timestamp)
+            dataTimestamp = DateTime(datetimeString : timestamp)
             addUpdateRecord(timestamp, length: data.lengthOfBytesUsingEncoding(NSUTF8StringEncoding), isDataUpdated: true)
-            print("Current Timestamp: " + lastUpdateTimestamp.toCompleteString())
+            print("Current Timestamp: " + dataTimestamp.completeString)
         } catch {
             throw MatError.NetworkDataError
         }
@@ -134,8 +136,8 @@ class User {
         let sql = "SELECT timestamp FROM sync_record WHERE updated=1 ORDER BY timestamp DESC LIMIT 1;";
         if let res = database.executeQuery(sql) {
             if res.next() {
-                lastUpdateTimestamp = DateTime(date: res.stringForColumnIndex(0))
-                print("User:initTimestamp: load last update timestamp" + lastUpdateTimestamp.toCompleteString())
+                dataTimestamp = DateTime(datetimeString: res.stringForColumnIndex(0))
+                print("User:initTimestamp: load last update timestamp" + dataTimestamp.completeString)
             }
         }
     }
@@ -149,16 +151,16 @@ class User {
         if let res = database.executeQuery(sql) {
             while res.next() {
                 let item = InboxItem();
-                item.mMsgId = Int(res.intForColumnIndex(0))
-                item.mSrcId = Int(res.intForColumnIndex(1))
-                item.mSrcTitle = res.stringForColumnIndex(2)
-                item.mType = MessageType(rawValue: Int(res.intForColumnIndex(3)))!
-                item.mStartTime = DateTime(date : res.stringForColumnIndex(4))
-                item.mEndTime = DateTime(date : res.stringForColumnIndex(5))
-                item.mPlace = res.stringForColumnIndex(6)
-                item.mText = res.stringForColumnIndex(7)
-                item.mStatus = MessageStatus(rawValue: Int(res.intForColumnIndex(8)))!
-                item.mTimestamp = DateTime(date: res.stringForColumnIndex(9))
+                item.msgId = Int(res.intForColumnIndex(0))
+                item.srcId = Int(res.intForColumnIndex(1))
+                item.srcTitle = res.stringForColumnIndex(2)
+                item.type = MessageType(rawValue: Int(res.intForColumnIndex(3)))!
+                item.startTime = DateTime(datetimeString : res.stringForColumnIndex(4))
+                item.endTime = DateTime(datetimeString : res.stringForColumnIndex(5))
+                item.place = res.stringForColumnIndex(6)
+                item.text = res.stringForColumnIndex(7)
+                item.status = MessageStatus(rawValue: Int(res.intForColumnIndex(8)))!
+                item.timestamp = DateTime(datetimeString: res.stringForColumnIndex(9))
                 items.append(item)
             }
         }
@@ -168,4 +170,8 @@ class User {
         return getInboxItemsPrime("WHERE status < 2 ORDER BY status, type, end_time, timestamp DESC;")
     }
 
+}
+
+func ==(lhs: User, rhs: User) -> Bool {
+    return lhs.userId == rhs.userId
 }

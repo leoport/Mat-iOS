@@ -16,16 +16,17 @@ protocol HttpTask {
 extension HttpTask {
     func completionHandler(data: NSData?, response: NSURLResponse?, error: NSError?) -> Void {
         /*
+        let httpResponse = response as! NSHTTPURLResponse
         var headers = httpResponse.allHeaderFields;
         if let cookiesHeader = headers["Set-Cookie"] {
-            user.cookieId = ""
             let cookies = cookiesHeader as! String
             for item in cookies.componentsSeparatedByString(" ") {
                 let keyValue = item.componentsSeparatedByString("=")
                 if (keyValue[0] == "COOKIEID") {
-                    user.cookieId = keyValue[1]
+                    print("COOKIE ID:" + keyValue[1] + "\n")
+                    //user.cookieId = keyValue[1]
                 } else if (keyValue[0] == "PHPSESSID") {
-                    user.sessionId = keyValue[1].stringByReplacingOccurrencesOfString(";", withString: "")
+                    //user.sessionId = keyValue[1].stringByReplacingOccurrencesOfString(";", withString: "")
                 }
             }
         } */
@@ -38,11 +39,15 @@ extension HttpTask {
         if let cookies = NSHTTPCookieStorage.sharedHTTPCookieStorage().cookies {
             for cookie in cookies {
                 if cookie.name == "COOKIEID" {
+                    print("cookie.value=" + cookie.value)
                     user.cookieId = cookie.value
                 } else if cookie.name == "PHPSESSID" {
                     user.sessionId = cookie.value
                 }
             }
+        }
+        if content.hasPrefix("Error/Login") {
+            user.cookieId = ""
         }
         dispatch_async(dispatch_get_main_queue(), { self.postExcute(content) })
     }
@@ -85,7 +90,8 @@ extension HttpTask {
                 NSHTTPCookieDomain : "leopub.org",
                 NSHTTPCookiePath : "/",
                 NSHTTPCookieName : "COOKIEID",
-                NSHTTPCookieValue : user.cookieId]
+                NSHTTPCookieValue : user.cookieId,
+                NSHTTPCookieDiscard : "TRUE" ]
             let cookie1 = NSHTTPCookie(properties: properties1)
             let properties2 = [
                 NSHTTPCookieDomain : "leopub.org",

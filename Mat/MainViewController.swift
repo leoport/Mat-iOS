@@ -8,41 +8,27 @@
 
 import UIKit
 
-class MasterViewController: UITableViewController {
+class MainViewController: UITableViewController {
     @IBOutlet weak var logoutBarButton: UIBarButtonItem!
 
-    var detailViewController: DetailViewController? = nil
     var items = [InboxItem]()
-    var msgTask : MessageTask?
+    var syncMsgTask : SyncMessageTask?
+    var viewUser : User?
+    var viewTimestamp : DateTime?
+    var itemViewController: InboxItemViewController? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        self.refreshControl?.addTarget(self, action: "onRefresh:", forControlEvents: UIControlEvents.ValueChanged)
-        //self.navigationItem.leftBarButtonItem = self.editButtonItem()
 
-        /*
-        let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "insertNewObject:")
-        self.navigationItem.rightBarButtonItem = addButton
-        if let split = self.splitViewController {
-            let controllers = split.viewControllers
-            self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
-        }
-*/
+        // add listener function for pull-refresh action
+        self.refreshControl?.addTarget(self, action: "onRefresh:", forControlEvents: UIControlEvents.ValueChanged)
     }
 
     override func viewWillAppear(animated: Bool) {
-        /*
-        if #available(iOS 8.0, *) {
-            self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed
-        } else {
-            // Fallback on earlier versions
-        } */
         super.viewWillAppear(animated)
-        if let user = UserManager.getInstance().getCurrentUser() {
-            items = user.getUndoneInboxItems()
-        } else {
-            performSegueWithIdentifier("logout", sender: nil)
+
+        smartLoadData()
+        if !viewUser!.isLogedIn() {
         }
     }
 
@@ -51,11 +37,12 @@ class MasterViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    /*
     func insertNewObject(sender: AnyObject) {
         //objects.insert(NSDate(), atIndex: 0)
         let indexPath = NSIndexPath(forRow: 0, inSection: 0)
         self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-    }
+    } */
 
     // MARK: - Segues
 
@@ -75,11 +62,11 @@ class MasterViewController: UITableViewController {
             }
         } */
         if segue.identifier == "ShowDetail" {
-            let detailController = segue.destinationViewController as! DetailViewController
-            if let selectedCell = sender as? MasterTableViewCell {
+            let itemViewController = segue.destinationViewController as! InboxItemViewController
+            if let selectedCell = sender as? MainTableViewCell {
                 let indexPath = tableView.indexPathForCell(selectedCell)!
                 let selectedItem = items[indexPath.row]
-                detailController.detailItem = selectedItem
+                itemViewController.item = selectedItem
             }
         }
 
@@ -96,26 +83,26 @@ class MasterViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! MasterTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! MainTableViewCell
 
         let item = items[indexPath.row]
         //cell.textLabel!.text = item.mSrcTitle + " " + item.mText
-        cell.mainLabel.text = item.mText
-        cell.leftHintLabel.text = item.mSrcTitle
-        if item.mStatus == MessageStatus.Init {
+        cell.mainLabel.text = item.text
+        cell.leftHintLabel.text = item.srcTitle
+        if item.status == MessageStatus.Init {
             cell.icon.image = UIImage(named: "Unread")
             cell.rightHintLabel.textColor = UIColor.redColor()
             cell.rightHintLabel.text = "未确认"
-        } else if item.mType == MessageType.Text {
+        } else if item.type == MessageType.Text {
             cell.icon.image = UIImage(named: "Alert")
             cell.rightHintLabel.text = ""
-        } else if item.mType == MessageType.Event {
+        } else if item.type == MessageType.Event {
             cell.icon.image = UIImage(named: "Calendar")
-            cell.rightHintLabel.text = item.mStartTime.toSimpleString() + "开始"
+            cell.rightHintLabel.text = item.startTime.simpleString + "开始"
             cell.rightHintLabel.textColor = UIColor.blackColor()
-        } else if item.mType == MessageType.Task {
+        } else if item.type == MessageType.Task {
             cell.icon.image = UIImage(named: "Task")
-            cell.rightHintLabel.text = "截至" + item.mEndTime.toSimpleString()
+            cell.rightHintLabel.text = "截至" + item.endTime.simpleString
             cell.rightHintLabel.textColor = UIColor.blackColor()
         }
         return cell
@@ -138,26 +125,29 @@ class MasterViewController: UITableViewController {
     @IBAction func onLogout(sender: UIBarButtonItem) {
         UserManager.getInstance().setCurrentUser(nil)
     }
+    func smartLoadData() {
+        if let currentUser = UserManager.getInstance().getCurrentUser() {
+            if viewUser == nil || viewUser! != currentUser || viewTimestamp != currentUser.dataTimestamp {
+                viewUser = currentUser
+                viewTimestamp = currentUser.dataTimestamp
+                items = currentUser.getUndoneInboxItems()
+                tableView.reloadData()
+            }
+        } else {
+            performSegueWithIdentifier("logout", sender: nil)
+        }
+    }
+
     func onRefresh(refreshControl: UIRefreshControl) {
-        /*
+        syncMsgTask = SyncMessageTask(controller: self)
         let user = UserManager.getInstance().getCurrentUser()
-        items = UserManager.getInstance().getCurrentUser()!.getUndoneInboxItems()
-        
-        self.tableView.reloadData()
-        refreshControl.endRefreshing() */
-        msgTask = MessageTask(controller: self)
-        let user = UserManager.getInstance().getCurrentUser()
-        let url = String(format: Configure.MSG_FETCH_URL, user!.lastUpdateTimestamp.toDigitString())
-        msgTask!.get(url)
+        let url = String(format: Configure.MSG_FETCH_URL, user!.dataTimestamp.digitString)
+        syncMsgTask!.get(url)
     }
-    @IBAction func unwindFromDetail(sender: UIStoryboardSegue) {
-        items = UserManager.getInstance().getCurrentUser()!.getUndoneInboxItems()
-        tableView.reloadData()
-    }
-    class MessageTask : HttpTask {
+    class SyncMessageTask : HttpTask {
         var user : User
-        var controller : MasterViewController
-        required init(controller : MasterViewController) {
+        var controller : MainViewController
+        required init(controller : MainViewController) {
             self.controller = controller
             self.user = UserManager.getInstance().getCurrentUser()!
         }
@@ -176,7 +166,6 @@ class MasterViewController: UITableViewController {
             }
             controller.refreshControl!.endRefreshing()
         }
-
     }
 }
 
