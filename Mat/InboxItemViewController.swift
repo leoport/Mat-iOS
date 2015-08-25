@@ -93,7 +93,7 @@ class InboxItemViewController: UIViewController {
     }
     private func setMessageStatus(newStatus : MessageStatus) {
         syncMessageTask = SyncMessageTask(controller: self)
-        let user = UserManager.getInstance().getCurrentUser()!
+        let user = UserManager.currentUser!
         let url = String(format: Configure.MSG_CONFIRM_URL, item!.srcId, item!.msgId, newStatus.rawValue, user.dataTimestamp.digitString)
         syncMessageTask!.get(url)
     }
@@ -103,7 +103,7 @@ class InboxItemViewController: UIViewController {
         var controller : InboxItemViewController
         required init(controller : InboxItemViewController) {
             self.controller = controller
-            self.user = UserManager.getInstance().getCurrentUser()!
+            self.user = UserManager.currentUser!
         }
 
         func postExcute(response: NSString) {

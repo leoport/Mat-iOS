@@ -66,7 +66,7 @@ class LoginViewController: UIViewController {
 
         func postExcute(response: NSString) {
             if controller.user!.isLogedIn() {
-                UserManager.getInstance().setCurrentUser(controller.user)
+                UserManager.currentUser = controller.user
                 controller.initUserData()
             } else {
                 controller.usernameTextField.enabled = true

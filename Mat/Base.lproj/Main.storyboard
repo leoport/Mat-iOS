@@ -36,12 +36,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HOY-il-wqJ">
-                                <rect key="frame" x="20" y="72" width="560" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HOY-il-wqJ">
+                                <rect key="frame" x="20" y="72" width="560" height="60"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="退出登录"/>
                                 <connections>
                                     <action selector="onLogout:" destination="j9w-dX-9YU" eventType="touchUpInside" id="QOL-8W-g41"/>
-                                    <segue destination="yHN-1y-7IL" kind="showDetail" identifier="Logout" id="d8Q-0c-gRc"/>
+                                    <segue destination="yHN-1y-7IL" kind="presentation" identifier="Logout" id="d8Q-0c-gRc"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -52,7 +53,7 @@
                             <constraint firstItem="HOY-il-wqJ" firstAttribute="leading" secondItem="I1J-ab-NLi" secondAttribute="leadingMargin" id="vPB-8X-hts"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="BP1-R0-GFu"/>
+                    <navigationItem key="navigationItem" title="我" id="BP1-R0-GFu"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KxO-2W-TH0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -238,13 +239,7 @@
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dJe-I8-Sl5">
                                             <rect key="frame" x="48" y="34" width="256" height="22"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HUp-mD-hpF">
-                                            <rect key="frame" x="312" y="34" width="280" height="22"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <color key="textColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -252,6 +247,12 @@
                                             <rect key="frame" x="48" y="8" width="544" height="24"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HUp-mD-hpF">
+                                            <rect key="frame" x="312" y="34" width="280" height="22"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>

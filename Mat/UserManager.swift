@@ -9,7 +9,14 @@
 import Foundation
 
 class UserManager {
-    private static let sInstance =  UserManager()
+    private static let INSTANCE =  UserManager()
+    static var currentUser : User? {
+        get {
+            return INSTANCE.mCurrentUser
+        } set (newUser){
+            INSTANCE.setCurrentUser(newUser)
+        }
+    }
     private var mCurrentUser : User?
 
     required init() {
@@ -46,15 +53,7 @@ class UserManager {
         loginDB.close()
     }
 
-    static func getInstance() -> UserManager {
-        return sInstance;
-    }
-
-    func getCurrentUser() -> User? {
-        return mCurrentUser;
-    }
-
-    func setCurrentUser(newUser: User?) {
+    private func setCurrentUser(newUser: User?) {
         let loginDB = FMDatabase(path: Configure.LOGIN_DB_PATH)
         if !loginDB.open() {
             print("UserManager:setCurrentUser: Unable to open database")
@@ -64,12 +63,21 @@ class UserManager {
             if !loginDB.executeUpdate("INSERT OR REPLACE INTO login VALUES(?, ?, CURRENT_TIMESTAMP);", withArgumentsInArray: [newUser!.userId, newUser!.cookieId]) {
                 print("UserManager:setCurrentUser: set nonnull user failed: \(loginDB.lastErrorMessage())")
             }
-        } else {
-            if !loginDB.executeUpdate("UPDATE login SET cookie_id = NULL WHERE username = '?';", withArgumentsInArray: [self.mCurrentUser!.userId]) {
-                print("UserManager:setCurrentUser: failed to erase current cookie_id in database")
-            }
         }
         loginDB.close()
         mCurrentUser = newUser
+    }
+    static func logoutCurrentUser() {
+        if (INSTANCE.mCurrentUser == nil) { return }
+
+        let loginDB = FMDatabase(path: Configure.LOGIN_DB_PATH)
+        if !loginDB.open() {
+            print("UserManager:setCurrentUser: Unable to open database")
+            return
+        }
+        if !loginDB.executeUpdate("UPDATE login SET cookie_id = '' WHERE username = ?;", withArgumentsInArray: [INSTANCE.mCurrentUser!.userId]) {
+            print("UserManager:setCurrentUser: failed to erase current cookie_id in database")
+        }
+        loginDB.close()
     }
 }

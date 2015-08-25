@@ -13,4 +13,8 @@ class Configure {
     static let DOCUMENTS_FOLDER = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
     static let LOGIN_DB_PATH = DOCUMENTS_FOLDER.stringByAppendingPathComponent("login.sqlite")
 
+    enum TabView : Int {
+        case Inbox = 0
+        case Me
+    }
 }

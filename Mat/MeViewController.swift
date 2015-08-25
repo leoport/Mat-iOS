@@ -23,7 +23,7 @@ class MeViewController: UIViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        let user = UserManager.getInstance().getCurrentUser()
+        let user = UserManager.currentUser
         if user == nil || !user!.isLogedIn() {
             performSegueWithIdentifier("Logout", sender: nil)
         }
@@ -39,9 +39,7 @@ class MeViewController: UIViewController {
     }
     */
     @IBAction func onLogout(sender: UIButton) {
-        let userManager = UserManager.getInstance()
-        userManager.getCurrentUser()?.cookieId = ""
-        userManager.setCurrentUser(nil)
+        UserManager.logoutCurrentUser()
     }
 
 }

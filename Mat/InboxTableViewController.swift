@@ -124,7 +124,7 @@ class InboxTableViewController: UITableViewController {
     }
 
     func smartLoadData() {
-        if let currentUser = UserManager.getInstance().getCurrentUser() {
+        if let currentUser = UserManager.currentUser {
             if currentUser.isLogedIn() {
                 if viewUser == nil || viewUser! != currentUser || viewTimestamp != currentUser.dataTimestamp {
                     viewUser = currentUser
@@ -137,17 +137,19 @@ class InboxTableViewController: UITableViewController {
                     tableView.reloadData()
                 }
             } else {
-                tabBarController!.selectedIndex = 1
+                //tabBarController!.selectedIndex = Configure.TabView.Me.rawValue
+                jumpToLogin()
             }
         } else {
             //performSegueWithIdentifier("logout", sender: nil)
-            tabBarController!.selectedIndex = 1
+            //tabBarController!.selectedIndex = Configure.TabView.Me.rawValue
+            jumpToLogin()
         }
     }
     @IBAction func onRightBarButtonClicked(sender: UIBarButtonItem) {
         displayAllItems = !displayAllItems
         rightBarButtonItem.title = rightBarButtonTitles[Int(displayAllItems)]
-        let currentUser = UserManager.getInstance().getCurrentUser()!
+        let currentUser = UserManager.currentUser!
         if displayAllItems {
             items = currentUser.getInboxItems()
         } else {
@@ -156,10 +158,15 @@ class InboxTableViewController: UITableViewController {
         tableView.reloadData()
     }
 
+    func jumpToLogin() {
+        UserManager.logoutCurrentUser()
+        tabBarController!.selectedIndex = Configure.TabView.Me.rawValue
+    }
+
     func onRefresh(refreshControl: UIRefreshControl) {
         syncMsgTask = SyncMessageTask(controller: self)
-        let user = UserManager.getInstance().getCurrentUser()
-        let url = String(format: Configure.MSG_FETCH_URL, user!.dataTimestamp.digitString)
+        let user = UserManager.currentUser!
+        let url = String(format: Configure.MSG_FETCH_URL, user.dataTimestamp.digitString)
         syncMsgTask!.get(url)
     }
     class SyncMessageTask : HttpTask {
@@ -167,20 +174,22 @@ class InboxTableViewController: UITableViewController {
         var controller : InboxTableViewController
         required init(controller : InboxTableViewController) {
             self.controller = controller
-            self.user = UserManager.getInstance().getCurrentUser()!
+            self.user = UserManager.currentUser!
         }
         func postExcute(response: NSString) {
             if user.isLogedIn() {
                 do {
                     try user.sync(response as String)
-                    controller.items = UserManager.getInstance().getCurrentUser()!.getUndoneInboxItems()
+                    controller.items = UserManager.currentUser!.getUndoneInboxItems()
                     controller.tableView.reloadData()
                 } catch {
                     controller.view.makeToast(message: "网络数据错误")
                 }
             } else {
                 controller.view.makeToast(message: "验证用户失败")
-                controller.performSegueWithIdentifier("logout", sender: nil)
+                //controller.performSegueWithIdentifier("logout", sender: nil)
+                //tabBarController!.selectedIndex = Configure.TabView.Me.rawValue
+                controller.jumpToLogin()
             }
             controller.refreshControl!.endRefreshing()
         }
