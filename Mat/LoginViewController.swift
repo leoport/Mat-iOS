@@ -26,7 +26,6 @@ class LoginViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
     /*
     // MARK: - Navigation
 
@@ -93,10 +92,11 @@ class LoginViewController: UIViewController {
                     controller.passwordTextField.enabled = true
                     controller.loginButton.enabled = true
                 }
-                if let tableViewController = controller.navigationController?.viewControllers[0] as? MainViewController {
+                /*
+                if let tableViewController = controller.navigationController?.viewControllers[0] as? InboxTableViewController {
                     tableViewController.items = user.getUndoneInboxItems()
                     tableViewController.tableView.reloadData()
-                }
+                } */
                 controller.dismissViewControllerAnimated(true, completion: nil)
             } else {
                 controller.view.makeToast(message: "验证用户失败")

@@ -169,7 +169,9 @@ class User : Equatable {
     func getUndoneInboxItems() -> [InboxItem] {
         return getInboxItemsPrime("WHERE status < 2 ORDER BY status, type, end_time, timestamp DESC;")
     }
-
+    func getInboxItems() -> [InboxItem] {
+        return getInboxItemsPrime("ORDER BY status ASC, inbox.timestamp DESC;");
+    }
 }
 
 func ==(lhs: User, rhs: User) -> Bool {

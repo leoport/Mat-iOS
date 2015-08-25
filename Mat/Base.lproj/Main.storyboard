@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8164.2" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="RMx-3f-FxP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8164.2" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ySR-mK-XIv">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8135.1"/>
@@ -8,10 +8,11 @@
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
-        <!--Master-->
+        <!--InboxNavi-->
         <scene sceneID="pY4-Hu-kfo">
             <objects>
-                <navigationController title="Master" id="RMx-3f-FxP" sceneMemberID="viewController">
+                <navigationController title="InboxNavi" id="RMx-3f-FxP" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="收件箱" image="Unread" id="3ce-Jx-hOb"/>
                     <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Pmd-2v-anx">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -21,7 +22,41 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8fS-aE-onr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1675" y="-533"/>
+            <point key="canvasLocation" x="-1355" y="-517"/>
+        </scene>
+        <!--Me-->
+        <scene sceneID="BKy-Sk-vVF">
+            <objects>
+                <viewController title="Me" id="j9w-dX-9YU" customClass="MeViewController" customModule="Mat" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="7hW-dA-Jkq"/>
+                        <viewControllerLayoutGuide type="bottom" id="P9H-Aa-0wl"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="I1J-ab-NLi" customClass="MeView">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HOY-il-wqJ">
+                                <rect key="frame" x="20" y="72" width="560" height="30"/>
+                                <state key="normal" title="退出登录"/>
+                                <connections>
+                                    <action selector="onLogout:" destination="j9w-dX-9YU" eventType="touchUpInside" id="QOL-8W-g41"/>
+                                    <segue destination="yHN-1y-7IL" kind="showDetail" identifier="Logout" id="d8Q-0c-gRc"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="HOY-il-wqJ" firstAttribute="top" secondItem="7hW-dA-Jkq" secondAttribute="bottom" constant="8" symbolic="YES" id="Rir-aT-k6z"/>
+                            <constraint firstItem="HOY-il-wqJ" firstAttribute="trailing" secondItem="I1J-ab-NLi" secondAttribute="trailingMargin" id="rD5-ra-hDB"/>
+                            <constraint firstItem="HOY-il-wqJ" firstAttribute="leading" secondItem="I1J-ab-NLi" secondAttribute="leadingMargin" id="vPB-8X-hts"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="BP1-R0-GFu"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KxO-2W-TH0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-623" y="896"/>
         </scene>
         <!--UndoneInboxItem-->
         <scene sceneID="yUG-lL-AsK">
@@ -35,7 +70,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kZy-qb-Qre">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kZy-qb-Qre">
                                 <rect key="frame" x="20" y="72" width="560" height="508"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
@@ -74,18 +109,25 @@
                                     <action selector="onConfirm:" destination="JEX-9P-axG" id="mE5-6Z-GQ1"/>
                                 </connections>
                             </barButtonItem>
+                            <barButtonItem title="提醒我" id="E9D-9G-nyN">
+                                <connections>
+                                    <action selector="onUndone:" destination="JEX-9P-axG" id="Pm8-6N-4Mj"/>
+                                </connections>
+                            </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="backBarButton" destination="hJL-T6-jtE" id="pYD-I5-08h"/>
                         <outlet property="completeBarButton" destination="Zep-E7-FK1" id="h7J-nZ-wVQ"/>
                         <outlet property="confirmBarButton" destination="CK0-tU-YHo" id="stA-os-RpH"/>
                         <outlet property="contentTextView" destination="kZy-qb-Qre" id="hh5-mQ-S8X"/>
                         <outlet property="ignoreBarButton" destination="p2n-gU-unS" id="zmc-xw-x2E"/>
+                        <outlet property="undoneBarButton" destination="E9D-9G-nyN" id="nIi-bH-C8X"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FJe-Yq-33r" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-987" y="203"/>
+            <point key="canvasLocation" x="57" y="-517"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="jFp-KS-LXE">
@@ -170,18 +212,18 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mPN-qf-Ql7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-291" y="-533"/>
+            <point key="canvasLocation" x="57" y="896"/>
         </scene>
-        <!--Master-->
+        <!--InboxTable-->
         <scene sceneID="smW-Zh-WAh">
             <objects>
-                <tableViewController storyboardIdentifier="mainScene" title="Master" clearsSelectionOnViewWillAppear="NO" id="7bK-jq-Zjz" customClass="MainViewController" customModule="Mat" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="inboxScene" title="InboxTable" clearsSelectionOnViewWillAppear="NO" id="7bK-jq-Zjz" customClass="InboxTableViewController" customModule="Mat" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="58" sectionHeaderHeight="22" sectionFooterHeight="22" id="r7i-6Z-zg0">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" rowHeight="58" id="WCw-Qf-5nD" customClass="MainTableViewCell" customModule="Mat" customModuleProvider="target">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" rowHeight="58" id="WCw-Qf-5nD" customClass="InboxTableViewCell" customModule="Mat" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="86" width="600" height="58"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WCw-Qf-5nD" id="37f-cq-3Eg">
@@ -238,13 +280,10 @@
                             <outlet property="delegate" destination="7bK-jq-Zjz" id="RA6-mI-bju"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="aW8-Ni-ina">
-                        <barButtonItem key="rightBarButtonItem" title="退出" id="UfO-nU-4Tv">
+                    <navigationItem key="navigationItem" title="收件箱" id="aW8-Ni-ina">
+                        <barButtonItem key="rightBarButtonItem" title="Item" id="wFe-PZ-Plf">
                             <connections>
-                                <action selector="onLogout:" destination="7bK-jq-Zjz" id="6S2-59-xi3"/>
-                                <segue destination="yHN-1y-7IL" kind="popoverPresentation" identifier="logout" popoverAnchorBarButtonItem="UfO-nU-4Tv" id="pI8-32-fW2">
-                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                </segue>
+                                <action selector="onRightBarButtonClicked:" destination="7bK-jq-Zjz" id="IYP-nq-nEw"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -260,12 +299,12 @@
                         </attributedString>
                     </refreshControl>
                     <connections>
-                        <outlet property="logoutBarButton" destination="UfO-nU-4Tv" id="dkm-h2-EOR"/>
+                        <outlet property="rightBarButtonItem" destination="wFe-PZ-Plf" id="4A5-Ri-fq9"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rux-fX-hf1" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-987" y="-533"/>
+            <point key="canvasLocation" x="-623" y="-517"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="5JF-d7-D5g">
@@ -283,9 +322,51 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IrK-6r-X5s" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1675" y="211"/>
+            <point key="canvasLocation" x="717" y="-509"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="EY1-rr-7dG">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="ySR-mK-XIv" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="ECl-bo-oCc">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="RMx-3f-FxP" kind="relationship" relationship="viewControllers" id="VeG-Ux-5B2"/>
+                        <segue destination="NoV-XQ-8sy" kind="relationship" relationship="viewControllers" id="PSa-cU-Qbz"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="17b-0g-BoI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2199" y="347"/>
+        </scene>
+        <!--MeNavi-->
+        <scene sceneID="MVI-cM-vXM">
+            <objects>
+                <navigationController title="MeNavi" automaticallyAdjustsScrollViewInsets="NO" id="NoV-XQ-8sy" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Me" image="User" id="kGd-9k-Rij"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Zbc-Vl-3uU">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="j9w-dX-9YU" kind="relationship" relationship="rootViewController" id="2Nd-w7-VOR"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9V9-Pa-haA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1355" y="896"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Unread" width="32" height="32"/>
+        <image name="User" width="32" height="32"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="kS7-F6-lbz"/>
     </inferredMetricsTieBreakers>

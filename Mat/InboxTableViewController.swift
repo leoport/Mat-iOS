@@ -8,14 +8,16 @@
 
 import UIKit
 
-class MainViewController: UITableViewController {
-    @IBOutlet weak var logoutBarButton: UIBarButtonItem!
+class InboxTableViewController: UITableViewController {
+    @IBOutlet weak var rightBarButtonItem: UIBarButtonItem!
 
     var items = [InboxItem]()
     var syncMsgTask : SyncMessageTask?
     var viewUser : User?
     var viewTimestamp : DateTime?
     var itemViewController: InboxItemViewController? = nil
+    var displayAllItems : Bool = false
+    let rightBarButtonTitles = ["全部消息", "待办事项"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,8 +30,7 @@ class MainViewController: UITableViewController {
         super.viewWillAppear(animated)
 
         smartLoadData()
-        if !viewUser!.isLogedIn() {
-        }
+        rightBarButtonItem.title = rightBarButtonTitles[Int(displayAllItems)]
     }
 
     override func didReceiveMemoryWarning() {
@@ -63,7 +64,7 @@ class MainViewController: UITableViewController {
         } */
         if segue.identifier == "ShowDetail" {
             let itemViewController = segue.destinationViewController as! InboxItemViewController
-            if let selectedCell = sender as? MainTableViewCell {
+            if let selectedCell = sender as? InboxTableViewCell {
                 let indexPath = tableView.indexPathForCell(selectedCell)!
                 let selectedItem = items[indexPath.row]
                 itemViewController.item = selectedItem
@@ -83,7 +84,7 @@ class MainViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! MainTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! InboxTableViewCell
 
         let item = items[indexPath.row]
         //cell.textLabel!.text = item.mSrcTitle + " " + item.mText
@@ -122,20 +123,37 @@ class MainViewController: UITableViewController {
         }
     }
 
-    @IBAction func onLogout(sender: UIBarButtonItem) {
-        UserManager.getInstance().setCurrentUser(nil)
-    }
     func smartLoadData() {
         if let currentUser = UserManager.getInstance().getCurrentUser() {
-            if viewUser == nil || viewUser! != currentUser || viewTimestamp != currentUser.dataTimestamp {
-                viewUser = currentUser
-                viewTimestamp = currentUser.dataTimestamp
-                items = currentUser.getUndoneInboxItems()
-                tableView.reloadData()
+            if currentUser.isLogedIn() {
+                if viewUser == nil || viewUser! != currentUser || viewTimestamp != currentUser.dataTimestamp {
+                    viewUser = currentUser
+                    viewTimestamp = currentUser.dataTimestamp
+                    if displayAllItems {
+                        items = currentUser.getInboxItems()
+                    } else {
+                        items = currentUser.getUndoneInboxItems()
+                    }
+                    tableView.reloadData()
+                }
+            } else {
+                tabBarController!.selectedIndex = 1
             }
         } else {
-            performSegueWithIdentifier("logout", sender: nil)
+            //performSegueWithIdentifier("logout", sender: nil)
+            tabBarController!.selectedIndex = 1
         }
+    }
+    @IBAction func onRightBarButtonClicked(sender: UIBarButtonItem) {
+        displayAllItems = !displayAllItems
+        rightBarButtonItem.title = rightBarButtonTitles[Int(displayAllItems)]
+        let currentUser = UserManager.getInstance().getCurrentUser()!
+        if displayAllItems {
+            items = currentUser.getInboxItems()
+        } else {
+            items = currentUser.getUndoneInboxItems()
+        }
+        tableView.reloadData()
     }
 
     func onRefresh(refreshControl: UIRefreshControl) {
@@ -146,8 +164,8 @@ class MainViewController: UITableViewController {
     }
     class SyncMessageTask : HttpTask {
         var user : User
-        var controller : MainViewController
-        required init(controller : MainViewController) {
+        var controller : InboxTableViewController
+        required init(controller : InboxTableViewController) {
             self.controller = controller
             self.user = UserManager.getInstance().getCurrentUser()!
         }

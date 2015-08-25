@@ -11,6 +11,8 @@ import UIKit
 class InboxItemViewController: UIViewController {
 
     @IBOutlet weak var contentTextView: UITextView!
+    @IBOutlet weak var backBarButton: UIBarButtonItem!
+    @IBOutlet weak var undoneBarButton: UIBarButtonItem!
     @IBOutlet weak var confirmBarButton: UIBarButtonItem!
     @IBOutlet weak var ignoreBarButton: UIBarButtonItem!
     @IBOutlet weak var completeBarButton: UIBarButtonItem!
@@ -40,6 +42,9 @@ class InboxItemViewController: UIViewController {
             if item.status != MessageStatus.Init {
                 confirmBarButton.enabled = false
             }
+            if item.status == MessageStatus.Init || item.status == MessageStatus.Confirmed {
+                undoneBarButton.enabled = false
+            }
         }
     }
 
@@ -57,6 +62,10 @@ class InboxItemViewController: UIViewController {
     @IBAction func onBack(sender: UIBarButtonItem) {
         navigationController!.popViewControllerAnimated(true)
     }
+    @IBAction func onUndone(sender: UIBarButtonItem) {
+        enableSyncButton(false)
+        setMessageStatus(MessageStatus.Confirmed)
+    }
     @IBAction func onConfirm(sender: UIBarButtonItem) {
         enableSyncButton(false)
         setMessageStatus(MessageStatus.Confirmed)
@@ -70,9 +79,17 @@ class InboxItemViewController: UIViewController {
         setMessageStatus(MessageStatus.Accomplished)
     }
     private func enableSyncButton (enabled : Bool) {
+        backBarButton.enabled = enabled
+        undoneBarButton.enabled = enabled
         confirmBarButton.enabled = enabled
         ignoreBarButton.enabled = enabled
         completeBarButton.enabled = enabled
+        if item!.status != MessageStatus.Init {
+            confirmBarButton.enabled = false
+        }
+        if item!.status == MessageStatus.Init || item!.status == MessageStatus.Confirmed {
+            undoneBarButton.enabled = false
+        }
     }
     private func setMessageStatus(newStatus : MessageStatus) {
         syncMessageTask = SyncMessageTask(controller: self)
