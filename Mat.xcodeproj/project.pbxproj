@@ -20,6 +20,10 @@
 		BF306B631B8C5A2A0058A1FB /* MeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF306B621B8C5A2A0058A1FB /* MeViewController.swift */; };
 		BF3A067E1B86CA37004E7F06 /* MatError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3A067D1B86CA37004E7F06 /* MatError.swift */; };
 		BF3A06801B86D145004E7F06 /* HRToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3A067F1B86D145004E7F06 /* HRToast.swift */; };
+		BF735B031B8D471B007CE1BA /* SentItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF735B021B8D471B007CE1BA /* SentItem.swift */; };
+		BF735B051B8D4C65007CE1BA /* SentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF735B041B8D4C65007CE1BA /* SentTableViewController.swift */; };
+		BF735B071B8D4D27007CE1BA /* SentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF735B061B8D4D27007CE1BA /* SentTableViewCell.swift */; };
+		BF735B091B8D4FB6007CE1BA /* SentItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF735B081B8D4FB6007CE1BA /* SentItemViewController.swift */; };
 		BF80D1741B6A4F050098A3F9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF80D1731B6A4F050098A3F9 /* AppDelegate.swift */; };
 		BF80D1761B6A4F050098A3F9 /* InboxTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF80D1751B6A4F050098A3F9 /* InboxTableViewController.swift */; };
 		BF80D1781B6A4F050098A3F9 /* InboxItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF80D1771B6A4F050098A3F9 /* InboxItemViewController.swift */; };
@@ -37,6 +41,7 @@
 		BFF1AEEA1B7C35FE00B74EDF /* MessageStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF1AEE91B7C35FE00B74EDF /* MessageStatus.swift */; };
 		BFF1AEEC1B7C36E200B74EDF /* DateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF1AEEB1B7C36E200B74EDF /* DateTime.swift */; };
 		BFF1AEEE1B7C39A600B74EDF /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF1AEED1B7C39A600B74EDF /* Contact.swift */; };
+		BFF3B9E81B8EDA9C00188FCD /* ComposeMsgViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF3B9E71B8EDA9C00188FCD /* ComposeMsgViewController.swift */; };
 		BFFC14B61B835C4500D47DEE /* InboxTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFC14B51B835C4500D47DEE /* InboxTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -78,6 +83,10 @@
 		BF306B621B8C5A2A0058A1FB /* MeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeViewController.swift; sourceTree = "<group>"; };
 		BF3A067D1B86CA37004E7F06 /* MatError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatError.swift; sourceTree = "<group>"; };
 		BF3A067F1B86D145004E7F06 /* HRToast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HRToast.swift; sourceTree = "<group>"; };
+		BF735B021B8D471B007CE1BA /* SentItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SentItem.swift; sourceTree = "<group>"; };
+		BF735B041B8D4C65007CE1BA /* SentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SentTableViewController.swift; sourceTree = "<group>"; };
+		BF735B061B8D4D27007CE1BA /* SentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SentTableViewCell.swift; sourceTree = "<group>"; };
+		BF735B081B8D4FB6007CE1BA /* SentItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SentItemViewController.swift; sourceTree = "<group>"; };
 		BF80D1701B6A4F050098A3F9 /* Mat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF80D1731B6A4F050098A3F9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BF80D1751B6A4F050098A3F9 /* InboxTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxTableViewController.swift; sourceTree = "<group>"; };
@@ -101,6 +110,7 @@
 		BFF1AEE91B7C35FE00B74EDF /* MessageStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageStatus.swift; sourceTree = "<group>"; };
 		BFF1AEEB1B7C36E200B74EDF /* DateTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTime.swift; sourceTree = "<group>"; };
 		BFF1AEED1B7C39A600B74EDF /* Contact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		BFF3B9E71B8EDA9C00188FCD /* ComposeMsgViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeMsgViewController.swift; sourceTree = "<group>"; };
 		BFFC14B51B835C4500D47DEE /* InboxTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InboxTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -213,6 +223,10 @@
 				BF80D1751B6A4F050098A3F9 /* InboxTableViewController.swift */,
 				BFFC14B51B835C4500D47DEE /* InboxTableViewCell.swift */,
 				BF80D1771B6A4F050098A3F9 /* InboxItemViewController.swift */,
+				BF735B041B8D4C65007CE1BA /* SentTableViewController.swift */,
+				BF735B061B8D4D27007CE1BA /* SentTableViewCell.swift */,
+				BF735B081B8D4FB6007CE1BA /* SentItemViewController.swift */,
+				BFF3B9E71B8EDA9C00188FCD /* ComposeMsgViewController.swift */,
 				BF306B621B8C5A2A0058A1FB /* MeViewController.swift */,
 				BF0D899A1B78D149003F2878 /* LoginViewController.swift */,
 				BF3A067F1B86D145004E7F06 /* HRToast.swift */,
@@ -231,6 +245,7 @@
 				BFDABB871B7C3E7C00E36334 /* MessageType.swift */,
 				BFF1AEEB1B7C36E200B74EDF /* DateTime.swift */,
 				BFDABB891B7C452200E36334 /* InboxItem.swift */,
+				BF735B021B8D471B007CE1BA /* SentItem.swift */,
 				BF3A067D1B86CA37004E7F06 /* MatError.swift */,
 			);
 			name = Model;
@@ -369,13 +384,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				BFE6031C1B79F9BF003E23D3 /* UserManager.swift in Sources */,
+				BF735B051B8D4C65007CE1BA /* SentTableViewController.swift in Sources */,
 				BFF1AEEE1B7C39A600B74EDF /* Contact.swift in Sources */,
+				BF735B031B8D471B007CE1BA /* SentItem.swift in Sources */,
 				BFC09BEA1B7D87F3000B0C88 /* HttpTask.swift in Sources */,
 				BFF1AEEA1B7C35FE00B74EDF /* MessageStatus.swift in Sources */,
 				BFDABB881B7C3E7C00E36334 /* MessageType.swift in Sources */,
+				BF735B071B8D4D27007CE1BA /* SentTableViewCell.swift in Sources */,
 				BF306B631B8C5A2A0058A1FB /* MeViewController.swift in Sources */,
 				BF0824661B7AE07C00CECA85 /* FMDatabasePool.m in Sources */,
 				BF0D899B1B78D149003F2878 /* LoginViewController.swift in Sources */,
+				BFF3B9E81B8EDA9C00188FCD /* ComposeMsgViewController.swift in Sources */,
 				BF80D1781B6A4F050098A3F9 /* InboxItemViewController.swift in Sources */,
 				BF0824671B7AE07C00CECA85 /* FMDatabaseQueue.m in Sources */,
 				BF0824631B7AE07C00CECA85 /* FMDatabase.m in Sources */,
@@ -384,6 +403,7 @@
 				BF0D899D1B78DE49003F2878 /* Configure.swift in Sources */,
 				BF3A067E1B86CA37004E7F06 /* MatError.swift in Sources */,
 				BFF1AEE81B7C357000B74EDF /* ConfirmItem.swift in Sources */,
+				BF735B091B8D4FB6007CE1BA /* SentItemViewController.swift in Sources */,
 				BF0824691B7AE07C00CECA85 /* FMResultSet.m in Sources */,
 				BFE6031E1B79FDA0003E23D3 /* User.swift in Sources */,
 				BFDABB8A1B7C452200E36334 /* InboxItem.swift in Sources */,

@@ -72,6 +72,8 @@ class User : Equatable {
             //print(contactsJSON)
             updateContacts(contactsJSON as! Array<Dictionary<String, String>>)
             updateIndox(jsonObj["inbox"] as! Array<Dictionary<String, String>>)
+            syncSent(jsonObj["sent"] as! Array<Dictionary<String, String>>)
+            
             let timestamp = jsonObj["timestamp"] as! String
             dataTimestamp = DateTime(datetimeString : timestamp)
             addUpdateRecord(timestamp, length: data.lengthOfBytesUsingEncoding(NSUTF8StringEncoding), isDataUpdated: true)
@@ -80,7 +82,7 @@ class User : Equatable {
             throw MatError.NetworkDataError
         }
     }
-    func updateContacts(json : Array<Dictionary<String, String>>) {
+    private func updateContacts(json : Array<Dictionary<String, String>>) {
         for item in json {
             let sql = String(format: "INSERT OR REPLACE INTO contact VALUES('%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@');",
                 item["id"]!,
@@ -99,7 +101,7 @@ class User : Equatable {
             }
         }
     }
-    func updateIndox(json: Array<Dictionary<String, String>>) {
+    private func updateIndox(json: Array<Dictionary<String, String>>) {
         for item in json {
             let query = String(format : "INSERT OR REPLACE INTO `inbox` VALUES('%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@');",
                 item["msg_id"]!,
@@ -114,6 +116,27 @@ class User : Equatable {
                 item["status"]!,
                 item["timestamp"]!);
             database.executeUpdate(query)
+        }
+    }
+    private func syncSent(json: Array<Dictionary<String, String>>) {
+        for item in json {
+            let query = String(format: "INSERT OR REPLACE INTO sent VALUES('%@', '%@', '%@', '%@', %@, '%@', '%@', '%@', '%@', '%@', '%@');",
+                item["msg_id"]!,
+                item["dst_str"]!,
+                getGroupsTitle(item["dst_str"]!),
+                item["param"]!,
+                item["type"]!,
+                item["start_time"]!,
+                item["end_time"]!,
+                item["place"]!,
+                item["text"]!,
+                item["status"]!,
+                item["timestamp"]!
+            )
+            print(query)
+            if !database.executeUpdate(query) {
+                print("failed to update sent")
+            }
         }
     }
     func getContactTitle(id : Int) -> String {
@@ -172,6 +195,129 @@ class User : Equatable {
     func getInboxItems() -> [InboxItem] {
         return getInboxItemsPrime("ORDER BY status ASC, inbox.timestamp DESC;");
     }
+    private func getSentItemsPrime(suffix : String) -> [SentItem] {
+        var items = [SentItem]()
+        let sql = "SELECT msg_id, dst_title, type, start_time, end_time, place, text, status, timestamp FROM sent " + suffix;
+        if let res = database.executeQuery(sql) {
+            while res.next() {
+                let item = SentItem();
+                item.msgId = Int(res.intForColumnIndex(0))
+                item.dstTitle = res.stringForColumnIndex(1)
+                item.type = MessageType(rawValue: Int(res.intForColumnIndex(2)))!
+                item.startTime = DateTime(datetimeString : res.stringForColumnIndex(3))
+                item.endTime = DateTime(datetimeString : res.stringForColumnIndex(4))
+                item.place = res.stringForColumnIndex(5)
+                item.text = res.stringForColumnIndex(6)
+                item.status = MessageStatus(rawValue: Int(res.intForColumnIndex(7)))!
+                item.timestamp = DateTime(datetimeString: res.stringForColumnIndex(8))
+                items.append(item)
+            }
+        }
+        return items
+    }
+    func getSentItems() -> [SentItem] {
+        return getSentItemsPrime("ORDER BY timestamp DESC")
+    }
+       /*
+    
+    public SentItem getSentItemByMsgId(int msgId) {
+    String[] params = { String.valueOf(msgId) };
+    List<SentItem> items = getSentItemsPrime("WHERE msg_id=? ORDER BY timestamp DESC;", params);
+    if (items.size() > 0) {
+    return items.get(0);
+    } else {
+    return null;
+    }
+    }
+    
+    public List<ConfirmItem> getConfirmItems(int msgId) {
+    List<ConfirmItem> res = new ArrayList<>();
+    String sql = "SELECT confirm_id, dst_id, dst_title, status, timestamp FROM confirm "
+    + "WHERE msg_id=? ORDER BY timestamp ASC;";
+    String[] params = { String.valueOf(msgId) };
+    Cursor cursor = mDatabase.rawQuery(sql, params);
+    while (cursor.moveToNext()) {
+    ConfirmItem item = new ConfirmItem();
+    item.setId(cursor.getInt(0));
+    item.setMsgId(msgId);
+    item.setDstId(cursor.getInt(1));
+    item.setDstTitle(cursor.getString(2));
+    item.setStatus(MessageStatus.fromOrdial(cursor.getInt(3)));
+    item.setTimestamp(new DateTime(cursor.getString(4)));
+    res.add(item);
+    }
+    cursor.close();
+    return res;
+    }
+    
+    public String getSentItemProgress(int msgId) {
+    String sql = "SELECT status, COUNT(*) FROM confirm WHERE msg_id=? GROUP BY status;";
+    String[] params = { String.valueOf(msgId) };
+    Cursor cursor = mDatabase.rawQuery(sql, params);
+    int all = 0;
+    int confirmed = 0;
+    while (cursor.moveToNext()) {
+    if (cursor.getInt(0) > 0) {
+    confirmed += cursor.getInt(1);
+    }
+    all += cursor.getInt(1);
+    }
+    cursor.close();
+    return confirmed + "/" + all;
+    } */
+    
+    func getGroupsTitle(groups : String) -> String {
+        var res = String()
+        let groupArray = groups.componentsSeparatedByString(";")
+    
+        for group in groupArray {
+            if group.isEmpty {
+                continue
+            }
+            if (group.rangeOfString(".") == nil) {
+                res += getContactTitle(Int(group)!);
+            } else {
+                res += getUnitTitle(group)
+            }
+            res += ";"
+        }
+        return res
+    }
+    
+    func getUnitTitle(expr : String) -> String {
+        let exprArray = expr.componentsSeparatedByString("\\.");
+        let title = exprArray[0] as NSString
+        let unit  = exprArray[1] as NSString
+        let major = unit.substringToIndex(2)
+        var res = String()
+        if major != "__" {
+            res += Configure.majorName[major]!
+        }
+        let grade = unit.substringWithRange(NSMakeRange(2, 2))
+        if grade != "__" {
+            res += grade + "级"
+        }
+        let className = unit.substringWithRange(NSMakeRange(5, 1))
+        if className != "_" {
+            res += className + "班";
+        }
+        if title.length == 0 {
+            res += "全体同学"
+        } else {
+            var firstItem = true
+            for i in 0 ..< title.length {
+                if firstItem {
+                    firstItem = false
+                } else {
+                    res += ","
+                }
+                let titleBrief = title.substringWithRange(NSMakeRange(i, 1))
+                res += Configure.titleName[titleBrief]!
+            }
+        }
+        return res
+    }
+
 }
 
 func ==(lhs: User, rhs: User) -> Bool {

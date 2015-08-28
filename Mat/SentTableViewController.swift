@@ -1,21 +1,21 @@
 //
-//  MasterViewController.swift
+//  SentTableViewController.swift
 //  Mat
 //
-//  Created by 君君 on 15/7/30.
+//  Created by 君君 on 15/8/26.
 //  Copyright © 2015年 梁晶. All rights reserved.
 //
 
 import UIKit
 
-class InboxTableViewController: UITableViewController {
+class SentTableViewController: UITableViewController {
     @IBOutlet weak var rightBarButtonItem: UIBarButtonItem!
 
-    var items = [InboxItem]()
+    var items = [SentItem]()
     var syncMsgTask : SyncMessageTask?
     var viewUser : User?
     var viewTimestamp : DateTime?
-    var itemViewController: InboxItemViewController? = nil
+    var itemViewController: SentItemViewController? = nil
     var displayAllItems : Bool = false
     let rightBarButtonTitles = ["全部消息", "待办事项"]
 
@@ -38,33 +38,12 @@ class InboxTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    /*
-    func insertNewObject(sender: AnyObject) {
-        //objects.insert(NSDate(), atIndex: 0)
-        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-    } */
-
     // MARK: - Segues
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        /*
-        if segue.identifier == "showDetail" {
-            if let indexPath = self.tableView.indexPathForSelectedRow {
-                let item = items[indexPath.row]
-                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
-                controller.detailItem = item
-                //if #available(iOS 8.0, *) {
-                //    controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
-                //} else {
-                //    // Fallback on earlier versions
-                //}
-                //controller.navigationItem.leftItemsSupplementBackButton = true
-            }
-        } */
-        if segue.identifier == "ShowDetail" {
-            let itemViewController = segue.destinationViewController as! InboxItemViewController
-            if let selectedCell = sender as? InboxTableViewCell {
+        if segue.identifier == "ShowSentItem" {
+            let itemViewController = segue.destinationViewController as! SentItemViewController
+            if let selectedCell = sender as? SentTableViewCell {
                 let indexPath = tableView.indexPathForCell(selectedCell)!
                 let selectedItem = items[indexPath.row]
                 itemViewController.item = selectedItem
@@ -84,25 +63,26 @@ class InboxTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("InboxCell", forIndexPath: indexPath) as! InboxTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("SentCell", forIndexPath: indexPath) as! SentTableViewCell
 
         let item = items[indexPath.row]
         //cell.textLabel!.text = item.mSrcTitle + " " + item.mText
         cell.mainLabel.text = item.text
-        cell.leftHintLabel.text = item.srcTitle
-        if item.status == MessageStatus.Init {
-            cell.icon.image = UIImage(named: "Unread")
-            cell.rightHintLabel.textColor = UIColor.redColor()
-            cell.rightHintLabel.text = "未确认"
-        } else if item.type == MessageType.Text {
-            cell.icon.image = UIImage(named: "Alert")
+        cell.leftHintLabel.text = item.dstTitle
+        //if item.status == MessageStatus.Init {
+        //    cell.iconImageView.image = UIImage(named: "Unread")
+        //    cell.rightHintLabel.textColor = UIColor.redColor()
+        //    cell.rightHintLabel.text = "未确认"
+        //} else if item.type == MessageType.Text {
+        if item.type == MessageType.Text {
+            cell.iconImageView.image = UIImage(named: "Alert")
             cell.rightHintLabel.text = ""
         } else if item.type == MessageType.Event {
-            cell.icon.image = UIImage(named: "Calendar")
+            cell.iconImageView.image = UIImage(named: "Calendar")
             cell.rightHintLabel.text = item.startTime.simpleString + "开始"
             cell.rightHintLabel.textColor = UIColor.blackColor()
         } else if item.type == MessageType.Task {
-            cell.icon.image = UIImage(named: "Task")
+            cell.iconImageView.image = UIImage(named: "Task")
             cell.rightHintLabel.text = "截至" + item.endTime.simpleString
             cell.rightHintLabel.textColor = UIColor.blackColor()
         }
@@ -131,19 +111,16 @@ class InboxTableViewController: UITableViewController {
                     viewUser = currentUser
                     viewTimestamp = currentUser.dataTimestamp
                     if displayAllItems {
-                        items = currentUser.getInboxItems()
+                        items = currentUser.getSentItems()
                     } else {
-                        items = currentUser.getUndoneInboxItems()
+                        items = currentUser.getSentItems()
                     }
                     tableView.reloadData()
                 }
             } else {
-                //tabBarController!.selectedIndex = Configure.TabView.Me.rawValue
                 jumpToLogin()
             }
         } else {
-            //performSegueWithIdentifier("logout", sender: nil)
-            //tabBarController!.selectedIndex = Configure.TabView.Me.rawValue
             jumpToLogin()
         }
     }
@@ -152,9 +129,9 @@ class InboxTableViewController: UITableViewController {
         rightBarButtonItem.title = rightBarButtonTitles[Int(displayAllItems)]
         let currentUser = UserManager.currentUser!
         if displayAllItems {
-            items = currentUser.getInboxItems()
+            items = currentUser.getSentItems()
         } else {
-            items = currentUser.getUndoneInboxItems()
+            items = currentUser.getSentItems()
         }
         tableView.reloadData()
     }
@@ -172,8 +149,8 @@ class InboxTableViewController: UITableViewController {
     }
     class SyncMessageTask : HttpTask {
         var user : User
-        var controller : InboxTableViewController
-        required init(controller : InboxTableViewController) {
+        var controller : SentTableViewController
+        required init(controller : SentTableViewController) {
             self.controller = controller
             self.user = UserManager.currentUser!
         }
@@ -181,8 +158,6 @@ class InboxTableViewController: UITableViewController {
             if user.isLogedIn() {
                 do {
                     try user.sync(response as String)
-                    //controller.items = UserManager.currentUser!.getUndoneInboxItems()
-                    //controller.tableView.reloadData()
                     controller.smartLoadData()
                 } catch {
                     controller.view.makeToast(message: "网络数据错误")
@@ -197,4 +172,3 @@ class InboxTableViewController: UITableViewController {
         }
     }
 }
-

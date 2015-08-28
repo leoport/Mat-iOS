@@ -15,6 +15,9 @@ class Configure {
 
     enum TabView : Int {
         case Inbox = 0
+        case Sent
         case Me
     }
+    static let majorName = ["cs": "计算机"]
+    static let titleName = ["b":"班长", "t": "团支书"]
 }

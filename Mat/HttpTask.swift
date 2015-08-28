@@ -39,7 +39,6 @@ extension HttpTask {
         if let cookies = NSHTTPCookieStorage.sharedHTTPCookieStorage().cookies {
             for cookie in cookies {
                 if cookie.name == "COOKIEID" {
-                    print("cookie.value=" + cookie.value)
                     user.cookieId = cookie.value
                 } else if cookie.name == "PHPSESSID" {
                     user.sessionId = cookie.value

@@ -9,12 +9,14 @@
 import Foundation
 
 class DateTime : Equatable {
-    private var date : NSDate
     private static let completeFormatter : NSDateFormatter = DateFormatterWrapper(format : "yyyy-MM-dd HH:mm:ss")
     private static let monthAndDayFormat : NSDateFormatter = DateFormatterWrapper(format : "MM-dd")
     private static let onlyDateFormat    : NSDateFormatter = DateFormatterWrapper(format : "yyyy-MM-dd")
     private static let simpleDateFormat  : NSDateFormatter = DateFormatterWrapper(format : "MM月dd日 HH点mm分")
     private static let digitDateFormat   : NSDateFormatter = DateFormatterWrapper(format : "yyyyMMddHHmmss")
+    static let Zero = DateTime(timeIntervalSince1970: 0)
+
+    private var date : NSDate
 
     var completeString : String {
         get {
@@ -50,7 +52,7 @@ class DateTime : Equatable {
             date = NSDate(timeIntervalSince1970: 0)
         }
     }
-    private class DateFormatterWrapper : NSDateFormatter {
+    class DateFormatterWrapper : NSDateFormatter {
         convenience init(format : String) {
             self.init()
             super.dateFormat = format
