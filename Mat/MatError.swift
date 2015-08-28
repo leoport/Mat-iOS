@@ -14,3 +14,12 @@ enum MatError : ErrorType {
     case AuthFailed
     case HintError(hint: String)
 }
+func ==(t1: MatError, t2: MatError) -> Bool {
+    switch (t1, t2) {
+    case (.NetworkError, .NetworkError): return true
+    case (.NetworkDataError, .NetworkDataError): return true
+    case (.AuthFailed, .AuthFailed): return true
+    case (.HintError, .HintError): return true
+    default: return false
+    }
+}

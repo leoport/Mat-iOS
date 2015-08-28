@@ -20,6 +20,7 @@
 		BF306B631B8C5A2A0058A1FB /* MeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF306B621B8C5A2A0058A1FB /* MeViewController.swift */; };
 		BF3A067E1B86CA37004E7F06 /* MatError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3A067D1B86CA37004E7F06 /* MatError.swift */; };
 		BF3A06801B86D145004E7F06 /* HRToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3A067F1B86D145004E7F06 /* HRToast.swift */; };
+		BF4428241B9048B100B626F8 /* MatServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4428231B9048B100B626F8 /* MatServer.swift */; };
 		BF735B031B8D471B007CE1BA /* SentItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF735B021B8D471B007CE1BA /* SentItem.swift */; };
 		BF735B051B8D4C65007CE1BA /* SentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF735B041B8D4C65007CE1BA /* SentTableViewController.swift */; };
 		BF735B071B8D4D27007CE1BA /* SentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF735B061B8D4D27007CE1BA /* SentTableViewCell.swift */; };
@@ -83,6 +84,7 @@
 		BF306B621B8C5A2A0058A1FB /* MeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeViewController.swift; sourceTree = "<group>"; };
 		BF3A067D1B86CA37004E7F06 /* MatError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatError.swift; sourceTree = "<group>"; };
 		BF3A067F1B86D145004E7F06 /* HRToast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HRToast.swift; sourceTree = "<group>"; };
+		BF4428231B9048B100B626F8 /* MatServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatServer.swift; sourceTree = "<group>"; };
 		BF735B021B8D471B007CE1BA /* SentItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SentItem.swift; sourceTree = "<group>"; };
 		BF735B041B8D4C65007CE1BA /* SentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SentTableViewController.swift; sourceTree = "<group>"; };
 		BF735B061B8D4D27007CE1BA /* SentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SentTableViewCell.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 				BF80D1731B6A4F050098A3F9 /* AppDelegate.swift */,
 				BF0D899C1B78DE49003F2878 /* Configure.swift */,
 				BFC09BE91B7D87F3000B0C88 /* HttpTask.swift */,
+				BF4428231B9048B100B626F8 /* MatServer.swift */,
 				BF80D1791B6A4F050098A3F9 /* Main.storyboard */,
 				BF80D17E1B6A4F050098A3F9 /* LaunchScreen.storyboard */,
 				BF80D17C1B6A4F050098A3F9 /* Assets.xcassets */,
@@ -390,6 +393,7 @@
 				BFC09BEA1B7D87F3000B0C88 /* HttpTask.swift in Sources */,
 				BFF1AEEA1B7C35FE00B74EDF /* MessageStatus.swift in Sources */,
 				BFDABB881B7C3E7C00E36334 /* MessageType.swift in Sources */,
+				BF4428241B9048B100B626F8 /* MatServer.swift in Sources */,
 				BF735B071B8D4D27007CE1BA /* SentTableViewCell.swift in Sources */,
 				BF306B631B8C5A2A0058A1FB /* MeViewController.swift in Sources */,
 				BF0824661B7AE07C00CECA85 /* FMDatabasePool.m in Sources */,

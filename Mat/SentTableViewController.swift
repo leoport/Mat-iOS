@@ -12,7 +12,6 @@ class SentTableViewController: UITableViewController {
     @IBOutlet weak var rightBarButtonItem: UIBarButtonItem!
 
     var items = [SentItem]()
-    var syncMsgTask : SyncMessageTask?
     var viewUser : User?
     var viewTimestamp : DateTime?
     var itemViewController: SentItemViewController? = nil
@@ -142,33 +141,19 @@ class SentTableViewController: UITableViewController {
     }
 
     func onRefresh(refreshControl: UIRefreshControl) {
-        syncMsgTask = SyncMessageTask(controller: self)
         let user = UserManager.currentUser!
-        let url = String(format: Configure.MSG_FETCH_URL, user.dataTimestamp.digitString)
-        syncMsgTask!.get(url)
+        MatServer.sync(user, completionHandler: handleRefreshResult)
     }
-    class SyncMessageTask : HttpTask {
-        var user : User
-        var controller : SentTableViewController
-        required init(controller : SentTableViewController) {
-            self.controller = controller
-            self.user = UserManager.currentUser!
+
+    func handleRefreshResult(result : MatError?) {
+        if result == nil {
+            smartLoadData()
+        } else if result! == MatError.AuthFailed {
+            view.makeToast(message: "验证用户失败")
+            jumpToLogin()
+        } else if result! == MatError.NetworkDataError {
+            view.makeToast(message: "网络数据错误")
         }
-        func postExcute(response: NSString) {
-            if user.isLogedIn() {
-                do {
-                    try user.sync(response as String)
-                    controller.smartLoadData()
-                } catch {
-                    controller.view.makeToast(message: "网络数据错误")
-                }
-            } else {
-                controller.view.makeToast(message: "验证用户失败")
-                //controller.performSegueWithIdentifier("logout", sender: nil)
-                //tabBarController!.selectedIndex = Configure.TabView.Me.rawValue
-                controller.jumpToLogin()
-            }
-            controller.refreshControl!.endRefreshing()
-        }
+        refreshControl!.endRefreshing()
     }
 }

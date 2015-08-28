@@ -8,33 +8,18 @@
 
 import Foundation
 
-protocol HttpTask {
-    var user : User { get set}
-    func postExcute(response : NSString) -> Void
-}
+class HttpTask {
+    typealias ResponseHandler = (content: String) -> Void
 
-extension HttpTask {
+    private var user : User!
+    private var responseHandler : ResponseHandler!
+
     func completionHandler(data: NSData?, response: NSURLResponse?, error: NSError?) -> Void {
-        /*
-        let httpResponse = response as! NSHTTPURLResponse
-        var headers = httpResponse.allHeaderFields;
-        if let cookiesHeader = headers["Set-Cookie"] {
-            let cookies = cookiesHeader as! String
-            for item in cookies.componentsSeparatedByString(" ") {
-                let keyValue = item.componentsSeparatedByString("=")
-                if (keyValue[0] == "COOKIEID") {
-                    print("COOKIE ID:" + keyValue[1] + "\n")
-                    //user.cookieId = keyValue[1]
-                } else if (keyValue[0] == "PHPSESSID") {
-                    //user.sessionId = keyValue[1].stringByReplacingOccurrencesOfString(";", withString: "")
-                }
-            }
-        } */
-        var content : NSString
+        var content : String
         if (data == nil) {
-            content = NSString(string: "")
+            content = ""
         } else {
-            content = NSString(data: data!, encoding: NSUTF8StringEncoding)!
+            content = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
         }
         if let cookies = NSHTTPCookieStorage.sharedHTTPCookieStorage().cookies {
             for cookie in cookies {
@@ -48,10 +33,13 @@ extension HttpTask {
         if content.hasPrefix("Error/Login") {
             user.cookieId = ""
         }
-        dispatch_async(dispatch_get_main_queue(), { self.postExcute(content) })
+        dispatch_async(dispatch_get_main_queue(), { self.responseHandler!(content: content) })
     }
 
-    mutating func get(url : String) {
+    func get(user: User, url : String, responseHandler: ResponseHandler) {
+        self.user = user
+        self.responseHandler = responseHandler
+
         let session = NSURLSession.sharedSession()
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         request.HTTPMethod = "GET"
@@ -62,7 +50,10 @@ extension HttpTask {
         dataTask.resume()
     }
 
-    mutating func post(url : String, params : Dictionary<String, String>) {
+    func post(user: User, url: String, params: Dictionary<String, String>, responseHandler: ResponseHandler) {
+        self.user = user
+        self.responseHandler = responseHandler
+
         var content = ""
         for (key, value) in params {
             if !content.isEmpty {
@@ -70,7 +61,6 @@ extension HttpTask {
             }
             content = content + key + "=" + value
         }
-        //let params = "username=" + username + "&password=" + password;
         let session = NSURLSession.sharedSession()
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         request.HTTPMethod = "POST"

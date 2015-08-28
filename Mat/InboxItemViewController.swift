@@ -16,8 +16,6 @@ class InboxItemViewController: UIViewController {
     @IBOutlet weak var confirmBarButton: UIBarButtonItem!
     @IBOutlet weak var ignoreBarButton: UIBarButtonItem!
     @IBOutlet weak var completeBarButton: UIBarButtonItem!
-    var syncMessageTask : SyncMessageTask?
-
 
     var item: InboxItem? {
         didSet {
@@ -92,39 +90,19 @@ class InboxItemViewController: UIViewController {
         }
     }
     private func setMessageStatus(newStatus : MessageStatus) {
-        syncMessageTask = SyncMessageTask(controller: self)
         let user = UserManager.currentUser!
-        let url = String(format: Configure.MSG_CONFIRM_URL, item!.srcId, item!.msgId, newStatus.rawValue, user.dataTimestamp.digitString)
-        syncMessageTask!.get(url)
+        MatServer.setInboxItemStatus(user, item: item!, status: newStatus, completionHandler: handleSetMessageResult)
     }
 
-    class SyncMessageTask : HttpTask {
-        var user : User
-        var controller : InboxItemViewController
-        required init(controller : InboxItemViewController) {
-            self.controller = controller
-            self.user = UserManager.currentUser!
+    func handleSetMessageResult(result : MatError?) {
+        if result == nil {
+            navigationController!.popViewControllerAnimated(true)
+        } else if result! == MatError.AuthFailed {
+            view.makeToast(message: "验证用户失败")
+        } else if result! == MatError.NetworkDataError {
+            view.makeToast(message: "网络数据错误")
         }
-
-        func postExcute(response: NSString) {
-            if user.isLogedIn() {
-                do {
-                    try user.sync(response as String)
-                    /*
-                    if let tableViewController = controller.navigationController?.viewControllers[0] as? MainViewController {
-                        tableViewController.items = user.getUndoneInboxItems()
-                        tableViewController.tableView.reloadData()
-                    } */
-                    controller.navigationController!.popViewControllerAnimated(true)
-                } catch {
-                    controller.view.makeToast(message: "网络数据错误")
-                    controller.enableSyncButton(true)
-                }
-            } else {
-                controller.view.makeToast(message: "验证用户失败")
-                controller.enableSyncButton(true)
-            }
-        }
+        enableSyncButton(true)
     }
 }
 

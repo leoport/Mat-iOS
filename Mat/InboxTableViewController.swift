@@ -12,7 +12,6 @@ class InboxTableViewController: UITableViewController {
     @IBOutlet weak var rightBarButtonItem: UIBarButtonItem!
 
     var items = [InboxItem]()
-    var syncMsgTask : SyncMessageTask?
     var viewUser : User?
     var viewTimestamp : DateTime?
     var itemViewController: InboxItemViewController? = nil
@@ -165,18 +164,28 @@ class InboxTableViewController: UITableViewController {
     }
 
     func onRefresh(refreshControl: UIRefreshControl) {
+        /*
         syncMsgTask = SyncMessageTask(controller: self)
         let user = UserManager.currentUser!
         let url = String(format: Configure.MSG_FETCH_URL, user.dataTimestamp.digitString)
-        syncMsgTask!.get(url)
+        syncMsgTask!.get(url) */
+
+        let user = UserManager.currentUser!
+        MatServer.sync(user, completionHandler: handleRefreshResult)
     }
-    class SyncMessageTask : HttpTask {
-        var user : User
-        var controller : InboxTableViewController
-        required init(controller : InboxTableViewController) {
-            self.controller = controller
-            self.user = UserManager.currentUser!
+
+    func handleRefreshResult(result : MatError?) {
+        if result == nil {
+            smartLoadData()
+        } else if result! == MatError.AuthFailed {
+            view.makeToast(message: "验证用户失败")
+            jumpToLogin()
+        } else if result! == MatError.NetworkDataError {
+            view.makeToast(message: "网络数据错误")
         }
+        refreshControl!.endRefreshing()
+    }
+    /*
         func postExcute(response: NSString) {
             if user.isLogedIn() {
                 do {
@@ -195,6 +204,6 @@ class InboxTableViewController: UITableViewController {
             }
             controller.refreshControl!.endRefreshing()
         }
-    }
+    } */
 }
 

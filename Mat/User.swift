@@ -14,6 +14,7 @@ class User : Equatable {
     var cookieId: String
     var database: FMDatabase
     var dataTimestamp : DateTime
+    var httpTask : HttpTask
 
 
     required init(userId: Int) {
@@ -26,6 +27,7 @@ class User : Equatable {
             print("User:init failed to open database")
         }
         dataTimestamp = DateTime(timeIntervalSince1970: 0)
+        httpTask = HttpTask()
         initDatabase()
         initTimestamp()
     }
@@ -317,7 +319,6 @@ class User : Equatable {
         }
         return res
     }
-
 }
 
 func ==(lhs: User, rhs: User) -> Bool {
