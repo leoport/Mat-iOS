@@ -28,8 +28,13 @@ class InboxTableViewController: UITableViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
-        smartLoadData()
         rightBarButtonItem.title = rightBarButtonTitles[Int(displayAllItems)]
+        smartLoadData()
+    }
+
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        autoJumpToLogin()
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,30 +42,9 @@ class InboxTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    /*
-    func insertNewObject(sender: AnyObject) {
-        //objects.insert(NSDate(), atIndex: 0)
-        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-    } */
-
     // MARK: - Segues
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        /*
-        if segue.identifier == "showDetail" {
-            if let indexPath = self.tableView.indexPathForSelectedRow {
-                let item = items[indexPath.row]
-                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
-                controller.detailItem = item
-                //if #available(iOS 8.0, *) {
-                //    controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
-                //} else {
-                //    // Fallback on earlier versions
-                //}
-                //controller.navigationItem.leftItemsSupplementBackButton = true
-            }
-        } */
         if segue.identifier == "ShowDetail" {
             let itemViewController = segue.destinationViewController as! InboxItemViewController
             if let selectedCell = sender as? InboxTableViewCell {
@@ -136,15 +120,9 @@ class InboxTableViewController: UITableViewController {
                     }
                     tableView.reloadData()
                 }
-            } else {
-                //tabBarController!.selectedIndex = Configure.TabView.Me.rawValue
-                jumpToLogin()
             }
-        } else {
-            //performSegueWithIdentifier("logout", sender: nil)
-            //tabBarController!.selectedIndex = Configure.TabView.Me.rawValue
-            jumpToLogin()
         }
+        autoJumpToLogin()
     }
     @IBAction func onRightBarButtonClicked(sender: UIBarButtonItem) {
         displayAllItems = !displayAllItems
@@ -158,18 +136,15 @@ class InboxTableViewController: UITableViewController {
         tableView.reloadData()
     }
 
-    func jumpToLogin() {
-        UserManager.logoutCurrentUser()
-        tabBarController!.selectedIndex = Configure.TabView.Me.rawValue
+    func autoJumpToLogin() {
+        if let user = UserManager.currentUser {
+            if !user.isLogedIn() {
+                tabBarController!.selectedIndex = Configure.TabView.Me.rawValue
+            }
+        }
     }
 
     func onRefresh(refreshControl: UIRefreshControl) {
-        /*
-        syncMsgTask = SyncMessageTask(controller: self)
-        let user = UserManager.currentUser!
-        let url = String(format: Configure.MSG_FETCH_URL, user.dataTimestamp.digitString)
-        syncMsgTask!.get(url) */
-
         let user = UserManager.currentUser!
         MatServer.sync(user, completionHandler: handleRefreshResult)
     }
@@ -179,31 +154,11 @@ class InboxTableViewController: UITableViewController {
             smartLoadData()
         } else if result! == MatError.AuthFailed {
             view.makeToast(message: "验证用户失败")
-            jumpToLogin()
         } else if result! == MatError.NetworkDataError {
             view.makeToast(message: "网络数据错误")
         }
         refreshControl!.endRefreshing()
+        autoJumpToLogin()
     }
-    /*
-        func postExcute(response: NSString) {
-            if user.isLogedIn() {
-                do {
-                    try user.sync(response as String)
-                    //controller.items = UserManager.currentUser!.getUndoneInboxItems()
-                    //controller.tableView.reloadData()
-                    controller.smartLoadData()
-                } catch {
-                    controller.view.makeToast(message: "网络数据错误")
-                }
-            } else {
-                controller.view.makeToast(message: "验证用户失败")
-                //controller.performSegueWithIdentifier("logout", sender: nil)
-                //tabBarController!.selectedIndex = Configure.TabView.Me.rawValue
-                controller.jumpToLogin()
-            }
-            controller.refreshControl!.endRefreshing()
-        }
-    } */
 }
 
