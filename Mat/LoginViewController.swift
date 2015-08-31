@@ -45,12 +45,13 @@ class LoginViewController: UIViewController {
     }
     func login(username: String, password: String) {
         user = User(userId: Int(username)!)
-        UserManager.currentUser = user
         
         MatServer.auth(user!, password: password, completionHandler: handleAuthResponse)
     }
 
     func handleAuthResponse(error: MatError?) {
+        UserManager.currentUser = user
+
         if error == nil {
             MatServer.sync(user!, completionHandler: handleSyncResult)
         } else {
