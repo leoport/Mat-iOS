@@ -114,9 +114,9 @@ class InboxTableViewController: UITableViewController {
                     viewUser = currentUser
                     viewTimestamp = currentUser.dataTimestamp
                     if displayAllItems {
-                        items = currentUser.getInboxItems()
+                        items = currentUser.inboxItems
                     } else {
-                        items = currentUser.getUndoneInboxItems()
+                        items = currentUser.undoneInboxItems
                     }
                     tableView.reloadData()
                 }
@@ -129,18 +129,17 @@ class InboxTableViewController: UITableViewController {
         rightBarButtonItem.title = rightBarButtonTitles[Int(displayAllItems)]
         let currentUser = UserManager.currentUser!
         if displayAllItems {
-            items = currentUser.getInboxItems()
+            items = currentUser.inboxItems
         } else {
-            items = currentUser.getUndoneInboxItems()
+            items = currentUser.undoneInboxItems
         }
         tableView.reloadData()
     }
 
     func autoJumpToLogin() {
-        if let user = UserManager.currentUser {
-            if !user.isLogedIn() {
-                tabBarController!.selectedIndex = Configure.TabView.Me.rawValue
-            }
+        let user = UserManager.currentUser
+        if user == nil || !user!.isLogedIn() {
+            tabBarController!.selectedIndex = Configure.TabView.Me.rawValue
         }
     }
 

@@ -32,6 +32,11 @@ class SentTableViewController: UITableViewController {
         rightBarButtonItem.title = rightBarButtonTitles[Int(displayAllItems)]
     }
 
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        autoJumpToLogin()
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -67,7 +72,7 @@ class SentTableViewController: UITableViewController {
         let item = items[indexPath.row]
         //cell.textLabel!.text = item.mSrcTitle + " " + item.mText
         cell.mainLabel.text = item.text
-        cell.leftHintLabel.text = item.dstTitle
+        cell.leftHintLabel.text = item.progress
         //if item.status == MessageStatus.Init {
         //    cell.iconImageView.image = UIImage(named: "Unread")
         //    cell.rightHintLabel.textColor = UIColor.redColor()
@@ -75,16 +80,15 @@ class SentTableViewController: UITableViewController {
         //} else if item.type == MessageType.Text {
         if item.type == MessageType.Text {
             cell.iconImageView.image = UIImage(named: "Alert")
-            cell.rightHintLabel.text = ""
+            cell.rightHintLabel.text = item.timestamp.simpleString + "发送"
         } else if item.type == MessageType.Event {
             cell.iconImageView.image = UIImage(named: "Calendar")
             cell.rightHintLabel.text = item.startTime.simpleString + "开始"
-            cell.rightHintLabel.textColor = UIColor.blackColor()
         } else if item.type == MessageType.Task {
             cell.iconImageView.image = UIImage(named: "Task")
             cell.rightHintLabel.text = "截至" + item.endTime.simpleString
-            cell.rightHintLabel.textColor = UIColor.blackColor()
         }
+        cell.rightHintLabel.textColor = UIColor.grayColor()
         return cell
     }
 
@@ -110,34 +114,33 @@ class SentTableViewController: UITableViewController {
                     viewUser = currentUser
                     viewTimestamp = currentUser.dataTimestamp
                     if displayAllItems {
-                        items = currentUser.getSentItems()
+                        items = currentUser.sentItems
                     } else {
-                        items = currentUser.getSentItems()
+                        items = currentUser.undoneSentItems
                     }
                     tableView.reloadData()
                 }
-            } else {
-                jumpToLogin()
             }
-        } else {
-            jumpToLogin()
         }
+        autoJumpToLogin()
     }
     @IBAction func onRightBarButtonClicked(sender: UIBarButtonItem) {
         displayAllItems = !displayAllItems
         rightBarButtonItem.title = rightBarButtonTitles[Int(displayAllItems)]
         let currentUser = UserManager.currentUser!
         if displayAllItems {
-            items = currentUser.getSentItems()
+            items = currentUser.sentItems
         } else {
-            items = currentUser.getSentItems()
+            items = currentUser.undoneSentItems
         }
         tableView.reloadData()
     }
 
-    func jumpToLogin() {
-        UserManager.logoutCurrentUser()
-        tabBarController!.selectedIndex = Configure.TabView.Me.rawValue
+    func autoJumpToLogin() {
+        let user = UserManager.currentUser
+        if user == nil || !user!.isLogedIn() {
+            tabBarController!.selectedIndex = Configure.TabView.Me.rawValue
+        }
     }
 
     func onRefresh(refreshControl: UIRefreshControl) {
@@ -150,10 +153,10 @@ class SentTableViewController: UITableViewController {
             smartLoadData()
         } else if result! == MatError.AuthFailed {
             view.makeToast(message: "验证用户失败")
-            jumpToLogin()
         } else if result! == MatError.NetworkDataError {
             view.makeToast(message: "网络数据错误")
         }
         refreshControl!.endRefreshing()
+        autoJumpToLogin()
     }
 }

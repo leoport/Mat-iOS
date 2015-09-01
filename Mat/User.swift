@@ -15,6 +15,42 @@ class User : Equatable {
     var database: FMDatabase
     var dataTimestamp : DateTime
     var httpTask : HttpTask
+    var inboxItems : [InboxItem] {
+        get {
+            if inboxItemsCache == nil {
+                inboxItemsCache = getInboxItemsPrime("ORDER BY status ASC, inbox.timestamp DESC;")
+            }
+            return inboxItemsCache!
+        }
+    }
+    var undoneInboxItems : [InboxItem] {
+        get {
+            if undoneInboxItemsCache == nil {
+                undoneInboxItemsCache = getInboxItemsPrime("WHERE status < 2 ORDER BY status, type, end_time, timestamp DESC;")
+            }
+            return undoneInboxItemsCache!
+        }
+    }
+    var sentItems : [SentItem] {
+        get {
+            if sentItemsCache == nil {
+                sentItemsCache = getSentItemsPrime("ORDER BY timestamp DESC")
+            }
+            return sentItemsCache!
+        }
+    }
+    var undoneSentItems : [SentItem] {
+        get {
+            if undoneSentItemsCache == nil {
+                undoneSentItemsCache = getSentItemsPrime("WHERE status = 0 ORDER BY timestamp DESC;")
+            }
+            return undoneSentItemsCache!
+        }
+    }
+    private var inboxItemsCache : [InboxItem]?
+    private var undoneInboxItemsCache : [InboxItem]?
+    private var sentItemsCache : [SentItem]?
+    private var undoneSentItemsCache : [SentItem]?
 
 
     required init(userId: Int) {
@@ -68,23 +104,45 @@ class User : Equatable {
         return !cookieId.isEmpty
     }
     func sync(data : String) throws {
+        var isDataUpdated = false
         do {
             let jsonObj = try NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
-            let contactsJSON = jsonObj["contact"]
-            //print(contactsJSON)
-            updateContacts(contactsJSON as! Array<Dictionary<String, String>>)
-            updateIndox(jsonObj["inbox"] as! Array<Dictionary<String, String>>)
-            syncSent(jsonObj["sent"] as! Array<Dictionary<String, String>>)
+            let contactsJSON = jsonObj["contact"] as! Array<Dictionary<String, String>>
+            if !contactsJSON.isEmpty {
+                isDataUpdated = true
+                syncContacts(contactsJSON)
+            }
+
+            let inboxJSON = jsonObj["inbox"] as! Array<Dictionary<String, String>>
+            if !inboxJSON.isEmpty {
+                isDataUpdated = true
+                syncIndox(inboxJSON)
+                inboxItemsCache = nil
+                undoneInboxItemsCache = nil
+            }
+
+            let sentJSON = jsonObj["sent"] as! Array<Dictionary<String, String>>
+            if !sentJSON.isEmpty {
+                isDataUpdated = true
+                syncSent(sentJSON)
+                sentItemsCache = nil
+                undoneSentItemsCache = nil
+            }
             
+            let confirmJSON = jsonObj["confirm"] as! Array<Dictionary<String, String>>
+            if !confirmJSON.isEmpty {
+                isDataUpdated = true
+                syncConfirm(confirmJSON)
+            }
             let timestamp = jsonObj["timestamp"] as! String
             dataTimestamp = DateTime(datetimeString : timestamp)
-            addUpdateRecord(timestamp, length: data.lengthOfBytesUsingEncoding(NSUTF8StringEncoding), isDataUpdated: true)
-            print("Current Timestamp: " + dataTimestamp.completeString)
+            addUpdateRecord(timestamp, length: data.lengthOfBytesUsingEncoding(NSUTF8StringEncoding), isDataUpdated: isDataUpdated)
+            print("Current Timestamp: \(dataTimestamp.completeString) Updated: \(isDataUpdated)")
         } catch {
             throw MatError.NetworkDataError
         }
     }
-    private func updateContacts(json : Array<Dictionary<String, String>>) {
+    private func syncContacts(json : Array<Dictionary<String, String>>) {
         for item in json {
             let sql = String(format: "INSERT OR REPLACE INTO contact VALUES('%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@');",
                 item["id"]!,
@@ -103,7 +161,7 @@ class User : Equatable {
             }
         }
     }
-    private func updateIndox(json: Array<Dictionary<String, String>>) {
+    private func syncIndox(json: Array<Dictionary<String, String>>) {
         for item in json {
             let query = String(format : "INSERT OR REPLACE INTO `inbox` VALUES('%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@');",
                 item["msg_id"]!,
@@ -141,6 +199,22 @@ class User : Equatable {
             }
         }
     }
+    private func syncConfirm(json: Array<Dictionary<String, String>>) {
+        for item in json {
+            let query = String(format: "INSERT OR REPLACE INTO `confirm` VALUES('%@', '%@', '%@', '%@', '%@', '%@');",
+                item["confirm_id"]!,
+                item["msg_id"]!,
+                item["dst_id"]!,
+                getContactTitle(Int(item["dst_id"]!)!),
+                item["status"]!,
+                item["timestamp"]!);
+            print(query)
+            if !database.executeUpdate(query) {
+                print("failed to update confirm")
+            }
+        }
+    }
+
     func getContactTitle(id : Int) -> String {
         let sql = "SELECT name, type FROM contact WHERE id=" + String(id) + ";"
         var title = ""
@@ -191,18 +265,12 @@ class User : Equatable {
         }
         return items
     }
-    func getUndoneInboxItems() -> [InboxItem] {
-        return getInboxItemsPrime("WHERE status < 2 ORDER BY status, type, end_time, timestamp DESC;")
-    }
-    func getInboxItems() -> [InboxItem] {
-        return getInboxItemsPrime("ORDER BY status ASC, inbox.timestamp DESC;");
-    }
     private func getSentItemsPrime(suffix : String) -> [SentItem] {
         var items = [SentItem]()
         let sql = "SELECT msg_id, dst_title, type, start_time, end_time, place, text, status, timestamp FROM sent " + suffix;
         if let res = database.executeQuery(sql) {
             while res.next() {
-                let item = SentItem();
+                let item = SentItem()
                 item.msgId = Int(res.intForColumnIndex(0))
                 item.dstTitle = res.stringForColumnIndex(1)
                 item.type = MessageType(rawValue: Int(res.intForColumnIndex(2)))!
@@ -212,62 +280,47 @@ class User : Equatable {
                 item.text = res.stringForColumnIndex(6)
                 item.status = MessageStatus(rawValue: Int(res.intForColumnIndex(7)))!
                 item.timestamp = DateTime(datetimeString: res.stringForColumnIndex(8))
+                item.progress = getSentItemProgress(item.msgId)
                 items.append(item)
             }
         }
         return items
     }
-    func getSentItems() -> [SentItem] {
-        return getSentItemsPrime("ORDER BY timestamp DESC")
+
+    func getConfirmItems(msgId: Int) -> [ConfirmItem] {
+        var items = [ConfirmItem]()
+        let sql = "SELECT confirm_id, dst_id, dst_title, status, timestamp FROM confirm WHERE msg_id=\(msgId) ORDER BY timestamp ASC;";
+        if let res = database.executeQuery(sql) {
+            while res.next() {
+                let item = ConfirmItem()
+                item.id = Int(res.intForColumnIndex(0))
+                item.msgId = msgId
+                item.dstId = Int(res.intForColumnIndex(1))
+                item.dstTitle = res.stringForColumnIndex(2)
+                item.status = MessageStatus(rawValue: Int(res.intForColumnIndex(3)))!
+                item.timestamp = DateTime(datetimeString: res.stringForColumnIndex(4))
+                items.append(item)
+            }
+        }
+        return items
     }
-       /*
-    
-    public SentItem getSentItemByMsgId(int msgId) {
-    String[] params = { String.valueOf(msgId) };
-    List<SentItem> items = getSentItemsPrime("WHERE msg_id=? ORDER BY timestamp DESC;", params);
-    if (items.size() > 0) {
-    return items.get(0);
-    } else {
-    return null;
+
+    func getSentItemProgress(msgId: Int) -> String {
+        let sql = "SELECT status, COUNT(*) FROM confirm WHERE msg_id=\(msgId) GROUP BY status;";
+        var all = 0
+        var confirmed = 0
+        if let res = database.executeQuery(sql) {
+            while res.next() {
+                let n = Int(res.intForColumnIndex(1))
+                if (res.intForColumnIndex(0) > 0) {
+                    confirmed += n
+                }
+                all += n
+            }
+        }
+        return "\(confirmed)/\(all)"
     }
-    }
-    
-    public List<ConfirmItem> getConfirmItems(int msgId) {
-    List<ConfirmItem> res = new ArrayList<>();
-    String sql = "SELECT confirm_id, dst_id, dst_title, status, timestamp FROM confirm "
-    + "WHERE msg_id=? ORDER BY timestamp ASC;";
-    String[] params = { String.valueOf(msgId) };
-    Cursor cursor = mDatabase.rawQuery(sql, params);
-    while (cursor.moveToNext()) {
-    ConfirmItem item = new ConfirmItem();
-    item.setId(cursor.getInt(0));
-    item.setMsgId(msgId);
-    item.setDstId(cursor.getInt(1));
-    item.setDstTitle(cursor.getString(2));
-    item.setStatus(MessageStatus.fromOrdial(cursor.getInt(3)));
-    item.setTimestamp(new DateTime(cursor.getString(4)));
-    res.add(item);
-    }
-    cursor.close();
-    return res;
-    }
-    
-    public String getSentItemProgress(int msgId) {
-    String sql = "SELECT status, COUNT(*) FROM confirm WHERE msg_id=? GROUP BY status;";
-    String[] params = { String.valueOf(msgId) };
-    Cursor cursor = mDatabase.rawQuery(sql, params);
-    int all = 0;
-    int confirmed = 0;
-    while (cursor.moveToNext()) {
-    if (cursor.getInt(0) > 0) {
-    confirmed += cursor.getInt(1);
-    }
-    all += cursor.getInt(1);
-    }
-    cursor.close();
-    return confirmed + "/" + all;
-    } */
-    
+
     func getGroupsTitle(groups : String) -> String {
         var res = String()
         let groupArray = groups.componentsSeparatedByString(";")

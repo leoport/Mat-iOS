@@ -15,14 +15,15 @@ class ComposeMessageViewController: UIViewController, UIPickerViewDataSource, UI
     @IBOutlet weak var typeTextField: UITextField!
     @IBOutlet weak var startTimeLabel: UILabel!
     @IBOutlet weak var startTimeTextField: UITextField!
-    @IBOutlet weak var endTimeTextField: UITextField!
     @IBOutlet weak var endTimeLabel: UILabel!
+    @IBOutlet weak var endTimeTextField: UITextField!
+    @IBOutlet weak var placeLabel: UILabel!
+    @IBOutlet weak var placeTextField: UITextField!
     @IBOutlet weak var contentTextView: UITextView!
     @IBOutlet weak var sendButton: UIButton!
     var startTimeDatePicker : UIDatePicker?
     var endTimeDatePicker : UIDatePicker?
     let dateFormatter = DateTime.DateFormatterWrapper(format: "yyyy-MM-dd HH:mm")
-    var syncMessageTask : SyncMessageTask?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,8 +51,6 @@ class ComposeMessageViewController: UIViewController, UIPickerViewDataSource, UI
         contentTextView.text = ""
         contentTextView.layer.borderWidth = 1
         contentTextView.layer.borderColor = UIColor.grayColor().CGColor
-
-        syncMessageTask = SyncMessageTask(controller: self)
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -99,38 +98,34 @@ class ComposeMessageViewController: UIViewController, UIPickerViewDataSource, UI
         startTimeTextField.hidden = hideDatePicker
         endTimeLabel.hidden = hideDatePicker
         endTimeTextField.hidden = hideDatePicker
+        placeLabel.hidden = hideDatePicker
+        placeTextField.hidden = hideDatePicker
         self.view.endEditing(true)
     }
     @IBAction func onSend(sender: UIButton) {
-        
-    }
-    class SyncMessageTask : HttpTask {
-        var user : User
-        var controller : ComposeMessageViewController
-        required init(controller : ComposeMessageViewController) {
-            self.controller = controller
-            self.user = UserManager.currentUser!
+        let user = UserManager.currentUser!
+        let receiver = receiverTextField.text
+        let type = MessageType(rawValue: typeStrings.indexOf(typeTextField.text!)!)!
+        var startTime = DateTime.Zero
+        var endTime = DateTime.Zero
+        var place = ""
+        if type != MessageType.Text {
+            startTime = DateTime(date: startTimeDatePicker!.date)
+            endTime = DateTime(date: endTimeDatePicker!.date)
+            place = placeTextField!.text!
         }
-
-        func postExcute(response: NSString) {
-            if user.isLogedIn() {
-                do {
-                    try user.sync(response as String)
-                    /*
-                    if let tableViewController = controller.navigationController?.viewControllers[0] as? MainViewController {
-                        tableViewController.items = user.getUndoneInboxItems()
-                        tableViewController.tableView.reloadData()
-                    } */
-                    //controller.navigationController!.popViewControllerAnimated(true)
-                    controller.dismissViewControllerAnimated(true, completion: nil)
-                } catch {
-                    controller.view.makeToast(message: "网络数据错误")
-                    //controller.enableSyncButton(true)
-                }
-            } else {
-                controller.view.makeToast(message: "验证用户失败")
-                //controller.enableSyncButton(true)
-            }
+        //MatServer.sendMessage(user, dst: receiver, type: type, startTime: startTime, endTime: endTime, place: "", text: contentTextView!.text, completionHanlder: handleSendMessageResult)
+        MatServer.sendMessage(user, dst: receiver!, type: type, startTime: startTime, endTime: endTime, place: place, text: contentTextView!.text, completionHanlder: handleSendMessageResult)
+    }
+    
+    func handleSendMessageResult(result : MatError?) {
+        if result == nil {
+            dismissViewControllerAnimated(true, completion: nil)
+            navigationController!.popViewControllerAnimated(true)
+        } else if result! == MatError.AuthFailed {
+            view.makeToast(message: "验证用户失败")
+        } else if result! == MatError.NetworkDataError {
+            view.makeToast(message: "网络数据错误")
         }
     }
 }

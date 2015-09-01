@@ -12,4 +12,5 @@ enum MessageStatus : Int {
     case Confirmed
     case Ignored
     case Accomplished
+    case Closed
 }

@@ -18,4 +18,5 @@ class SentItem {
     var text = ""
     var status = MessageStatus.Init
     var timestamp = DateTime.Zero
+    var progress = ""
 }

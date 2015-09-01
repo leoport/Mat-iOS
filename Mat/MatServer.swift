@@ -41,6 +41,21 @@ class MatServer {
         httpTask.get(user, url: url, responseHandler: handleSyncResponse)
     }
 
+    static func sendMessage(user: User, dst: String, type: MessageType, startTime: DateTime, endTime: DateTime, place: String, text: String, completionHanlder: (MatError?) -> Void ) {
+        self.user = user
+        self.syncCompletionHandler = completionHanlder
+        
+        let params: Dictionary<String, String> = [
+            "since": user.dataTimestamp.digitString,
+            "dst": dst,
+            "type": String(type.rawValue),
+            "start_time": startTime.completeString,
+            "end_time": endTime.completeString,
+            "place": place,
+            "text": text]
+        httpTask.post(user, url: Configure.MSG_POST_URL, params: params, responseHandler: handleSyncResponse)
+    }
+
     static func handleAuthResponse(content: String) {
         let user = MatServer.user
         var res : MatError?

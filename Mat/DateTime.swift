@@ -9,7 +9,7 @@
 import Foundation
 
 class DateTime : Equatable {
-    private static let completeFormatter : NSDateFormatter = DateFormatterWrapper(format : "yyyy-MM-dd HH:mm:ss")
+    static let completeFormatter : NSDateFormatter = DateFormatterWrapper(format : "yyyy-MM-dd HH:mm:ss")
     private static let monthAndDayFormat : NSDateFormatter = DateFormatterWrapper(format : "MM-dd")
     private static let onlyDateFormat    : NSDateFormatter = DateFormatterWrapper(format : "yyyy-MM-dd")
     private static let simpleDateFormat  : NSDateFormatter = DateFormatterWrapper(format : "MM月dd日 HH点mm分")
@@ -41,6 +41,9 @@ class DateTime : Equatable {
     }
     required init(timeIntervalSince1970: NSTimeInterval) {
         date = NSDate(timeIntervalSince1970: timeIntervalSince1970)
+    }
+    required init(date: NSDate) {
+        self.date = date
     }
     required init(datetimeString : String) {
         if (datetimeString == "0000-00-00 00:00:00") {

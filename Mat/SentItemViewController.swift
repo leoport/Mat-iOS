@@ -34,12 +34,23 @@ class SentItemViewController: UIViewController {
 
     func configureView() {
         if let item = self.item {
-            contentTextView.text = "收件人: " + item.dstTitle + "\n发件时间: " + item.timestamp.simpleString + "\n\n内容: " + item.text
+            var text = ""
+            text = "收件人: " + item.dstTitle + "\n发件时间: " + item.timestamp.simpleString + "\n\n内容: \n\n" + item.text + "\n\n"
             if item.type != MessageType.Text {
-                contentTextView.text = contentTextView.text + "\n\n"
-                    + "开始时间: " + item.startTime.simpleString + "\n"
-                    + "结束时间: " + item.endTime.simpleString
+                text = text + "开始时间: " + item.startTime.simpleString + "\n" + "结束时间: " + item.endTime.simpleString + "\n\n"
             }
+
+            text += "确认记录----------\n"
+            let confirmItems = UserManager.currentUser?.getConfirmItems(item.msgId)
+            for confirmItem in confirmItems! {
+                text = text + confirmItem.dstTitle + "  "
+                if confirmItem.status == MessageStatus.Init {
+                    text += "未确认\n"
+                } else {
+                    text += "已确认\n"
+                }
+            }
+            contentTextView.text = text
         }
     }
 
