@@ -321,6 +321,23 @@ class User : Equatable {
         return "\(confirmed)/\(all)"
     }
 
+    func getContacts(initChars: String) -> [Contact] {
+        var contacts = [Contact]()
+        let sql = "SELECT id, name, type, unit, title FROM contact WHERE name_char='\(initChars)' ORDER BY id;";
+        if let res = database.executeQuery(sql) {
+            while res.next() {
+                let contact = Contact()
+                contact.id = Int(res.intForColumnIndex(0))
+                contact.name = res.stringForColumnIndex(1)
+                contact.type = ContactType(rawValue: res.stringForColumnIndex(2))!
+                contact.unit = res.stringForColumnIndex(3)
+                contact.title = res.stringForColumnIndex(4)
+                contacts.append(contact)
+            }
+        }
+        return contacts
+    }
+
     func getGroupsTitle(groups : String) -> String {
         var res = String()
         let groupArray = groups.componentsSeparatedByString(";")
@@ -340,7 +357,7 @@ class User : Equatable {
     }
     
     func getUnitTitle(expr : String) -> String {
-        let exprArray = expr.componentsSeparatedByString("\\.");
+        let exprArray = expr.componentsSeparatedByString(".");
         let title = exprArray[0] as NSString
         let unit  = exprArray[1] as NSString
         let major = unit.substringToIndex(2)

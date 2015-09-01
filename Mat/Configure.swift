@@ -15,6 +15,8 @@ class Configure {
     static let DOCUMENTS_FOLDER = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
     static let LOGIN_DB_PATH = DOCUMENTS_FOLDER.stringByAppendingPathComponent("login.sqlite")
 
+    static let UNIT_CONTACT_RE = "^[abcfhltwxyz]*\\.(cs|__)[1_][234_][0_][1234_]$"
+
     enum TabView : Int {
         case Inbox = 0
         case Sent

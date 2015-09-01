@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ComposeMessageViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
+class ComposeMessageViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate, UIActionSheetDelegate {
     let typeStrings = ["文本消息", "集会消息", "任务消息"]
 
     @IBOutlet weak var receiverTextField: UITextField!
@@ -23,12 +23,21 @@ class ComposeMessageViewController: UIViewController, UIPickerViewDataSource, UI
     @IBOutlet weak var sendButton: UIButton!
     var startTimeDatePicker : UIDatePicker?
     var endTimeDatePicker : UIDatePicker?
+    var unitContactRE: NSRegularExpression!
     let dateFormatter = DateTime.DateFormatterWrapper(format: "yyyy-MM-dd HH:mm")
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        do {
+            unitContactRE = try NSRegularExpression(pattern: Configure.UNIT_CONTACT_RE, options: NSRegularExpressionOptions.CaseInsensitive)
+        } catch {
+            fatalError("INVALID REGULAR EXPRESSION for UNIT CONTACT")
+        }
+
+        receiverTextField.delegate = self
+
         let typePicker = UIPickerView()
         typePicker.delegate = self
         typeTextField.inputView = typePicker
@@ -104,7 +113,13 @@ class ComposeMessageViewController: UIViewController, UIPickerViewDataSource, UI
     }
     @IBAction func onSend(sender: UIButton) {
         let user = UserManager.currentUser!
-        let receiver = receiverTextField.text
+        var receivers = ""
+        let contacts = receiverTextField.text!.componentsSeparatedByString(";")
+        for contact in contacts {
+            if !contact.isEmpty {
+                receivers = receivers + contact.componentsSeparatedByString(",")[0] + ";"
+            }
+        }
         let type = MessageType(rawValue: typeStrings.indexOf(typeTextField.text!)!)!
         var startTime = DateTime.Zero
         var endTime = DateTime.Zero
@@ -115,7 +130,7 @@ class ComposeMessageViewController: UIViewController, UIPickerViewDataSource, UI
             place = placeTextField!.text!
         }
         //MatServer.sendMessage(user, dst: receiver, type: type, startTime: startTime, endTime: endTime, place: "", text: contentTextView!.text, completionHanlder: handleSendMessageResult)
-        MatServer.sendMessage(user, dst: receiver!, type: type, startTime: startTime, endTime: endTime, place: place, text: contentTextView!.text, completionHanlder: handleSendMessageResult)
+        MatServer.sendMessage(user, dst: receivers, type: type, startTime: startTime, endTime: endTime, place: place, text: contentTextView!.text, completionHanlder: handleSendMessageResult)
     }
     
     func handleSendMessageResult(result : MatError?) {
@@ -126,6 +141,59 @@ class ComposeMessageViewController: UIViewController, UIPickerViewDataSource, UI
             view.makeToast(message: "验证用户失败")
         } else if result! == MatError.NetworkDataError {
             view.makeToast(message: "网络数据错误")
+        }
+    }
+
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        let text = textField.text! as NSString
+        let seperator =  NSString(string: ";").characterAtIndex(0)
+        if range.location == text.length && range.length == 0 {
+            if (string == " ") { // the end of editing an item
+                let items = text.componentsSeparatedByString(";")
+                let lastItem = items[items.count - 1]
+                let text = text.substringToIndex(text.length - (lastItem as NSString).length)
+                receiverTextField.text = text
+                onChooseContactFromTextField(items[items.count - 1])
+                return false
+            } else { // normal input
+                return true
+            }
+        } else if string.isEmpty {
+            var index1 = range.location - 1
+            while index1 >= 0 && text.characterAtIndex(index1) !=  seperator {
+                index1--
+            }
+            var index2 = range.location + range.length - 1
+            while index2 < text.length - 1 && text.characterAtIndex(index2) !=  seperator {
+                index2++
+            }
+            textField.text = text.substringToIndex(index1 + 1) + text.substringFromIndex(index2 + 1)
+            return false
+        }else {
+            return false
+        }
+    }
+    func onChooseContactFromTextField(string: String) {
+        if unitContactRE.matchesInString(string, options: NSMatchingOptions.WithoutAnchoringBounds, range: NSMakeRange(0,(string as NSString).length)).count > 0 {
+            let unitTitle = UserManager.currentUser!.getUnitTitle(string)
+            receiverTextField.text = receiverTextField.text! + "\(string),\(unitTitle);"
+            return
+        }
+        let candidates = UserManager.currentUser!.getContacts(string)
+        if candidates.count == 1 {
+            receiverTextField.text = receiverTextField.text! + "\(candidates[0].id),\(candidates[0].name);"
+            return
+        }
+        let menu = UIActionSheet(title: "选择联系人", delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil)
+        for candidate in candidates {
+            menu.addButtonWithTitle(String(candidate.id) + "," + candidate.name)
+        }
+        menu.showInView(self.view)
+    }
+    func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
+        if buttonIndex > 0 {
+            let chosen = actionSheet.buttonTitleAtIndex(buttonIndex)!
+            receiverTextField.text = receiverTextField.text! + chosen + ";"
         }
     }
 }

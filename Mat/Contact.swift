@@ -8,14 +8,15 @@
 
 import Foundation
 class Contact {
-    enum Type : Int {
-        case T = 0 // For Teacher
-        case S     // For Student
-    };
     
     var id : Int = -1
     var name : String = ""
-    var type : Type = Type.S
+    var type : ContactType = ContactType.Student
     var unit : String = ""
     var title : String = ""
+}
+
+enum ContactType : String {
+    case Teacher = "T"
+    case Student = "S"
 }
